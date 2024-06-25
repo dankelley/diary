@@ -22,7 +22,9 @@ def diary():
     parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=textwrap.dedent("FIXME: explain more here"))
-    parser.add_argument("item", type=str, help="Diary item")
+    parser.add_argument("action", type=str,
+                        help="Action (either 'add' or 'show')")
+    parser.add_argument("entry", type=str, help="Diary entry")
     parser.add_argument("categories", type=str, help="Category (use comma to separate)")
     parser.add_argument("--debug", type=int, default=0,
                         help="0 for quiet action, 1 for some debugging output",
@@ -35,8 +37,14 @@ def diary():
         print("user gave database '%s'" % args.database)
     if not args.database:
         args.database = defaultDatabase
-    print("item '%s'" % args.item)
-    #print("categories '%s'" % args.categories)
-    categories = [category.strip() for category in args.categories.split(',')]
-    print("categories %s" % categories)
-    diary = Diary(debug=args.debug, db=args.database)
+    print("action '%s'" % args.action)
+    if args.action == "add":
+        print("entry '%s'" % args.entry)
+        print("categories '%s'" % args.categories)
+        diary = Diary(debug=args.debug, db=args.database)
+        diary.add_entry(args.entry, args.categories)
+    elif args.action == "show":
+        print("FIXME: code for 'show'")
+    else:
+        print("action must be either 'add' or 'show', not '%s'" % args.action)
+        exit(1)

@@ -87,6 +87,15 @@ class Diary:
     def version(self):
         return("nota version %d.%d.%d" % (self.appversion[0], self.appversion[1], self.appversion[2]))
 
+    def add_entry(self, entry, categories):
+        categories = [category.strip() for category in categories.split(',')]
+        print("adding...")
+        print("   entry %s" % entry)
+        print("   categories %s" % categories)
+        self.cur.execute("INSERT INTO entries(entry) VALUES(?);", (entry,))
+        self.con.commit()
+        print("done adding")
+
     def create_category(self, category):
         """Create a new category"""
         category = category.strip()
