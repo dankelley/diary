@@ -89,16 +89,23 @@ class Diary:
 
     def add_entry(self, entry, categories):
         categories = [category.strip() for category in categories.split(',')]
-        print("adding...")
-        print("   entry %s" % entry)
-        print("   categories %s" % categories)
+        print("add_entry...")
+        print("  entry:%s" % entry)
+        print("  categories:%s" % categories)
         self.cur.execute("INSERT INTO entries(entry) VALUES(?);", (entry,))
         self.con.commit()
         categoriesOriginal = []
-        categoriesOriginal.extend(self.cur.execute("SELECT category FROM categories;"))
+        categoriesOriginal.extend((self.cur.execute("SELECT category FROM categories;"),))
+        q = self.cur.execute("SELECT category from categories;").fetchall()
+        categoriesOld = [category[0] for category in q]
+        print("  existing categories: %s" % categoriesOld)
         for category in categories:
-            self.cur.execute("INSERT INTO categories(category) VALUES(?);", (category,))
-        self.con.commit()
+            if category in categoriesOld:
+                print("%s: already in db" % category)
+            else:
+                print("%s: adding to db" % category)
+                self.cur.execute("INSERT INTO categories(category) VALUES(?);", (category,))
+                self.con.commit()
         print("done adding")
 
     def create_category(self, category):

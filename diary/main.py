@@ -37,10 +37,10 @@ def diary():
         print("user gave database '%s'" % args.database)
     if not args.database:
         args.database = defaultDatabase
-    print("action '%s'" % args.action)
+    #print("action '%s'" % args.action)
     if args.action == "add":
-        print("entry '%s'" % args.entry)
-        print("categories '%s'" % args.categories)
+        #print("entry '%s'" % args.entry)
+        #print("categories '%s'" % args.categories)
         diary = Diary(debug=args.debug, db=args.database)
         diary.add_entry(args.entry, args.categories)
     elif args.action == "show":
