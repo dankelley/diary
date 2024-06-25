@@ -94,6 +94,11 @@ class Diary:
         print("   categories %s" % categories)
         self.cur.execute("INSERT INTO entries(entry) VALUES(?);", (entry,))
         self.con.commit()
+        categoriesOriginal = []
+        categoriesOriginal.extend(self.cur.execute("SELECT category FROM categories;"))
+        for category in categories:
+            self.cur.execute("INSERT INTO categories(category) VALUES(?);", (category,))
+        self.con.commit()
         print("done adding")
 
     def create_category(self, category):
