@@ -18,7 +18,16 @@ showRandomHint = False
 defaultDatabase = "~/Dropbox/diary.db"
 
 def diary():
-    #print("len(sys.argv) = %d" % len(sys.argv))
+    print("len(sys.argv) = %d" % len(sys.argv))
+    print("sys.argv = %s" % sys.argv)
+    if ":" in sys.argv:
+        print("COLON")
+        start = sys.argv.index(":") + 1
+        print("start at %d" % start)
+        #print("check %s" % sys.argv[cat])
+        categories = sys.argv[start:len(sys.argv)]
+        print("categories %s" % categories)
+        exit(0)
     parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=textwrap.dedent("FIXME: explain more here"))
@@ -33,6 +42,7 @@ def diary():
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
     args = parser.parse_args()
+    print("args %s" % args)
     if args.database:
         print("user gave database '%s'" % args.database)
     if not args.database:

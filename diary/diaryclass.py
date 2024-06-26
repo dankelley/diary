@@ -2,7 +2,7 @@
 
 import sys
 import sqlite3 as sqlite
-#import datetime
+import datetime
 import os.path
 #import difflib
 #from distutils.version import StrictVersion
@@ -92,7 +92,8 @@ class Diary:
         print("add_entry...")
         print("  entry:%s" % entry)
         print("  categories:%s" % categories)
-        self.cur.execute("INSERT INTO entries(entry) VALUES(?);", (entry,))
+        time = datetime.datetime.now()
+        self.cur.execute("INSERT INTO entries(time, entry) VALUES(?,?);", (time, entry))
         self.con.commit()
         categoriesOriginal = []
         categoriesOriginal.extend((self.cur.execute("SELECT category FROM categories;"),))
@@ -130,7 +131,7 @@ class Diary:
         self.cur.execute("INSERT INTO version(major, minor, subminor) VALUES (?,?,?);",
                 (self.appversion[0], self.appversion[1], self.appversion[2]))
         self.cur.execute("CREATE TABLE categories(categoryId integer primary key autoincrement, category);")
-        self.cur.execute("CREATE TABLE entries(entryId integer primary key autoincrement, entry);")
+        self.cur.execute("CREATE TABLE entries(entryId integer primary key autoincrement, time, entry);")
         self.cur.execute("CREATE TABLE entry_category(entryCategoryId integer primary key autoincrement, entryId, categoryId);")
         self.con.commit()
 
