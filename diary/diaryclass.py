@@ -89,25 +89,33 @@ class Diary:
 
     def add_entry(self, entry, categories):
         #categories = [category.strip() for category in categories.split(',')]
-        print("add_entry...")
-        print("  entry:%s" % entry)
-        print("  categories:%s" % categories)
+        self.fyi("add_entry...")
+        self.fyi("  entry:%s" % entry)
+        self.fyi("  categories:%s" % categories)
         time = datetime.datetime.now()
-        self.cur.execute("INSERT INTO entries(time, entry) VALUES(?,?);", (time, entry))
+        self.cur.execute("INSERT INTO entries(time,entry) VALUES(?,?);", (time, entry))
+        entryId = self.cur.lastrowid
+        self.fyi("entryID %d" % entryId)
         self.con.commit()
-        categoriesOriginal = []
-        categoriesOriginal.extend((self.cur.execute("SELECT category FROM categories;"),))
+        # add categories to known list
         q = self.cur.execute("SELECT category from categories;").fetchall()
+        self.con.commit()
         categoriesOld = [category[0] for category in q]
-        print("  existing categories: %s" % categoriesOld)
+        self.fyi("  existing categories: %s" % categoriesOld)
         for category in categories:
-            if category in categoriesOld:
-                print("%s: already in db" % category)
-            else:
-                print("%s: adding to db" % category)
+            if not category in categoriesOld:
+                self.fyi("%s: adding to db" % category)
                 self.cur.execute("INSERT INTO categories(category) VALUES(?);", (category,))
                 self.con.commit()
-        print("done adding")
+        # add linkages
+        for category in categories:
+            self.fyi("category %s" % category)
+            categoryId = self.cur.execute("SELECT categoryId FROM categories WHERE category='%s';" % category).fetchall()[0]
+            self.con.commit()
+            self.fyi("categoryId %d" % categoryId)
+            self.cur.execute("INSERT INTO entry_category(entryId,categoryId) VALUES(?,?);", (entryId, categoryId[0]))
+            self.con.commit()
+        self.fyi("done adding")
 
     def create_category(self, category):
         """Create a new category"""

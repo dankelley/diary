@@ -1,48 +1,39 @@
 # diary
 
-This is planned to be a python script to save diary entries.
+'diary' is a python script to handle diary entries.
 
-**Nothing works yet!  Skip to last section for tests and skip the
-stuff in between because I'm fiddling with the calling syntax to see
-what feels comfortable.**
+Nothing works yet!  Here are some samples.
 
-I will play a bit with possible UI features, before coding much.
-Right now I'm thinking along the following lines.
+Get help.
 
-    diary ACTION ITEM [CATEGORIES]
+    diary --help
+    diary -h
 
-where ACTION will be a single word, and CATEGORIES will be either a
-word or multiple words joined by commas.
+Add an entry that has no categories.
 
-Create an uncategorized item, lon and short forms
+    diary I ate breakfast.
 
-    diary add "Brush teeth"
+Add an entry that has a single category.
 
-Create an item in the 'health' category
+    diary I ate a salad for lunch. : food
 
-    diary add "Brush teeth" health
+Add an entry that has a two categories.
 
-Create an item in the 'health' and 'habit' categories
+    diary I ate a salad for lunch. : food healthy
 
-    diary add "Brush teeth" "health,habit"
+See all entries
 
-Show health diary items
+    diary --list
 
-    diary show health
+See entries with category `food`
 
-Both actions and categories will be accepted in abbreviated form, so
-long as they are unique.  The actions are predefined as `add` and
-`show`, so that is simple.  As for categories, e.g. `ha` would work
-for `habit`, but if `handsome` has been entered as category, then
-`hab` would be needed.
-
+    diary --list food
 
 Testing
 
-a='\rm ~/Dropbox/diary.db'
-b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary '
-c='echo .dump|sqlite3 ~/Dropbox/diary.db'
-
-b item with no categories
-b item with two categories : cat1 cat2
+    a='\rm ~/Dropbox/diary.db'
+    b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary '
+    c='echo .dump|sqlite3 ~/Dropbox/diary.db'
+    b item without categories
+    b item with two categories : cat1 cat2
 

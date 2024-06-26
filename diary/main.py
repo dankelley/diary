@@ -42,10 +42,11 @@ def diary():
     else:
         entry = ' '.join(map(str, args.words))
         categories = []
-    print("  entry:      %s" % entry)
-    print("  categories: %s" % categories)
-    if args.database:
-        print("user gave database '%s'" % args.database)
+    if args.debug:
+        print("  entry:      %s" % entry)
+        print("  categories: %s" % categories)
+        if args.database:
+            print("user gave database '%s'" % args.database)
     if not args.database:
         args.database = defaultDatabase
     diary = Diary(debug=args.debug, db=args.database)
