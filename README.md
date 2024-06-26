@@ -1,7 +1,10 @@
 # diary
+
 This is planned to be a python script to save diary entries.
 
-Nothing works yet!
+**Nothing works yet!  Skip to last section for tests and skip the
+stuff in between because I'm fiddling with the calling syntax to see
+what feels comfortable.**
 
 I will play a bit with possible UI features, before coding much.
 Right now I'm thinking along the following lines.
@@ -32,4 +35,14 @@ long as they are unique.  The actions are predefined as `add` and
 `show`, so that is simple.  As for categories, e.g. `ha` would work
 for `habit`, but if `handsome` has been entered as category, then
 `hab` would be needed.
+
+
+Testing
+
+a='\rm ~/Dropbox/diary.db'
+b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary '
+c='echo .dump|sqlite3 ~/Dropbox/diary.db'
+
+b item with no categories
+b item with two categories : cat1 cat2
 
