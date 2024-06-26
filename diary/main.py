@@ -18,16 +18,24 @@ showRandomHint = False
 defaultDatabase = "~/Dropbox/diary.db"
 
 def diary():
-    print("len(sys.argv) = %d" % len(sys.argv))
-    print("sys.argv = %s" % sys.argv)
+    #print("len(sys.argv) = %d" % len(sys.argv))
+    #print("sys.argv = %s" % sys.argv)
     if ":" in sys.argv:
-        print("COLON")
+        #print("COLON")
         start = sys.argv.index(":") + 1
-        print("start at %d" % start)
+        #print("start at %d" % start)
         #print("check %s" % sys.argv[cat])
         categories = sys.argv[start:len(sys.argv)]
-        print("categories %s" % categories)
-        exit(0)
+        #entry = []
+        #for words in sys.argv[1:start-1]:
+        #    entry.append(''.join(words))
+        entry = ' '.join(map(str, sys.argv[1:start-1]))
+    else:
+        entry = ' '.join(map(str, sys.argv[1:len(sys.argv)]))
+        categories = []
+    print("  entry:      %s" % entry)
+    print("  categories: %s" % categories)
+    exit(0)
     parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=textwrap.dedent("FIXME: explain more here"))
