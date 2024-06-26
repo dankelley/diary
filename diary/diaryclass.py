@@ -88,7 +88,7 @@ class Diary:
         return("nota version %d.%d.%d" % (self.appversion[0], self.appversion[1], self.appversion[2]))
 
     def add_entry(self, entry, categories):
-        categories = [category.strip() for category in categories.split(',')]
+        #categories = [category.strip() for category in categories.split(',')]
         print("add_entry...")
         print("  entry:%s" % entry)
         print("  categories:%s" % categories)
