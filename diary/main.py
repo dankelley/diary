@@ -32,7 +32,8 @@ def diary():
     parser.add_argument("--database", type=str, default=None,
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
-    parser.add_argument("words", type=str, nargs="+",
+    parser.add_argument("-l", "--list", type=str, nargs="*", help="list entries", metavar="")
+    parser.add_argument("words", type=str, nargs="*",
                         help="Entry words, perhaps followed by : and then categories")
     args = parser.parse_args()
     if ":" in args.words:

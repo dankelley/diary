@@ -52,9 +52,7 @@ class Diary:
         self.appversion = [0, 1, 0] # db schema changes always yield first or second digit increment
         self.dbversion = self.appversion
         if mustInitialize:
-            print("Initializing database; run 'diary' again to use it.")
             self.initialize()
-            return(None)
         try:
             self.dbversion = self.cur.execute("SELECT * FROM version;").fetchone()
         except:
