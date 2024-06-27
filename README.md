@@ -31,9 +31,12 @@ See entries with category `food`
 
 Testing
 
-    a='\rm ~/Dropbox/diary.db'
-    b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary '
-    c='echo .dump|sqlite3 ~/Dropbox/diary.db'
-    b item without categories
-    b item with two categories : cat1 cat2
+    alias a='\rm ~/Dropbox/diary.db'
+    alias b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary '
+    alias c='echo .dump|sqlite3 ~/Dropbox/diary.db'
+    b tweet or caw : bird sound
+    b meow : cat sound animal
+    b dog with no categories
+    c
+    echo "select time,entry,category FROM entries JOIN categories ON entry_category.entryId = categories.categoryId;"|sqlite3 ~/Dropbox/diary.db
 

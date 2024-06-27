@@ -141,6 +141,22 @@ class Diary:
         self.cur.execute("CREATE TABLE entry_category(entryCategoryId integer primary key autoincrement, entryId, categoryId);")
         self.con.commit()
 
+    def list_all(self):
+        ''' list all '''
+        q = '''
+        SELECT entries.time, entries.entry, categories.category
+        FROM entries
+        JOIN entry_category
+          ON entry_category.entryId = entries.entryId
+        JOIN categories
+          ON entry_category.categoryId =
+        categories.categoryId;
+        '''
+        self.fyi(q)
+        res = self.cur.execute(q).fetchall()
+        self.con.commit()
+        return(res)
+
     def list_categories(self):
         ''' Return alphabetized list of categories '''
         names = []
