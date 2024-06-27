@@ -27,9 +27,9 @@ def diary():
     parser.add_argument("--database", type=str, default=None,
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
-    parser.add_argument("-l", "--list", type=str, nargs="*", help="list entries", metavar="")
+    parser.add_argument("--list", action="store_true", help="list entries")
     parser.add_argument("words", type=str, nargs="*",
-                        help="Entry words, perhaps followed by : and then tags")
+                        help="Entry, optionally with tags following ':'")
     args = parser.parse_args()
     if ":" in args.words:
         start = args.words.index(":") + 1
@@ -41,11 +41,11 @@ def diary():
     if args.debug:
         print("  entry: %s" % entry)
         print("  tags:  %s" % tags)
-        if args.database:
-            print("user gave database '%s'" % args.database)
     if not args.database:
         args.database = defaultDatabase
     diary = Diary(debug=args.debug, db=args.database)
+    if args.debug:
+        print("  database: '%s'" % args.database)
     if args.list:
         print(diary.list_all())
         exit(1)

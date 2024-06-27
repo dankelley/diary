@@ -25,9 +25,13 @@ See all entries
 
     diary --list
 
-See entries with category `food`
+See entries with `salad` in the content(note coded yet)
 
-    diary --list food
+    diary --list salad
+
+See entries with tag `food` (note coded yet)
+
+    diary --list : food
 
 Testing
 
