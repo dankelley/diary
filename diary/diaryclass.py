@@ -85,50 +85,49 @@ class Diary:
     def version(self):
         return("nota version %d.%d.%d" % (self.appversion[0], self.appversion[1], self.appversion[2]))
 
-    def add_entry(self, entry, categories):
-        #categories = [category.strip() for category in categories.split(',')]
+    def add_entry(self, entry, tags):
         self.fyi("add_entry...")
-        self.fyi("  entry:%s" % entry)
-        self.fyi("  categories:%s" % categories)
+        self.fyi("  entry: %s" % entry)
+        self.fyi("  tags:  %s" % tags)
         time = datetime.datetime.now()
         self.cur.execute("INSERT INTO entries(time,entry) VALUES(?,?);", (time, entry))
         entryId = self.cur.lastrowid
         self.fyi("entryID %d" % entryId)
         self.con.commit()
-        # add categories to known list
-        q = self.cur.execute("SELECT category from categories;").fetchall()
+        # add tags to known list
+        q = self.cur.execute("SELECT tag from tags;").fetchall()
         self.con.commit()
-        categoriesOld = [category[0] for category in q]
-        self.fyi("  existing categories: %s" % categoriesOld)
-        for category in categories:
-            if not category in categoriesOld:
-                self.fyi("%s: adding to db" % category)
-                self.cur.execute("INSERT INTO categories(category) VALUES(?);", (category,))
+        tagsOld = [tag[0] for tag in q]
+        self.fyi("  existing tags: %s" % tagsOld)
+        for tag in tags:
+            if not tag in tagsOld:
+                self.fyi("%s: adding to db" % tag)
+                self.cur.execute("INSERT INTO tags(tag) VALUES(?);", (tag,))
                 self.con.commit()
         # add linkages
-        for category in categories:
-            self.fyi("category %s" % category)
-            categoryId = self.cur.execute("SELECT categoryId FROM categories WHERE category='%s';" % category).fetchall()[0]
+        for tag in tags:
+            self.fyi("tag %s" % tag)
+            tagId = self.cur.execute("SELECT tagId FROM tags WHERE tag='%s';" % tag).fetchall()[0]
             self.con.commit()
-            self.fyi("categoryId %d" % categoryId)
-            self.cur.execute("INSERT INTO entry_category(entryId,categoryId) VALUES(?,?);", (entryId, categoryId[0]))
+            self.fyi("tagId %d" % tagId)
+            self.cur.execute("INSERT INTO entry_tag(entryId,tagId) VALUES(?,?);", (entryId, tagId[0]))
             self.con.commit()
         self.fyi("done adding")
 
-    def create_category(self, category):
-        """Create a new category"""
-        category = category.strip()
-        if not len(category):
+    def create_tag(self, tag):
+        """Create a new tag"""
+        tag = tag.strip()
+        if not len(tag):
             self.error("Cannot have a blank book name")
-        if category.find(",") >= 0:
-            self.error("Cannot have a ',' in a category")
-        existing = self.list_categories()
-        if not category in existing:
+        if tag.find(",") >= 0:
+            self.error("Cannot have a ',' in a tag")
+        existing = self.list_tags()
+        if not tag in existing:
             try:
-                self.cur.execute("INSERT INTO category(category) VALUES(?);", (category))
+                self.cur.execute("INSERT INTO tags(tag) VALUES(?);", (tag))
                 self.con.commit()
             except:
-                self.fyi("Error adding a category named '%s'" % category)
+                self.fyi("Error adding a tag named '%s'" % tag)
 
 
     def initialize(self):
@@ -136,38 +135,38 @@ class Diary:
         self.cur.execute("CREATE TABLE version(major, minor, subminor);")
         self.cur.execute("INSERT INTO version(major, minor, subminor) VALUES (?,?,?);",
                 (self.appversion[0], self.appversion[1], self.appversion[2]))
-        self.cur.execute("CREATE TABLE categories(categoryId integer primary key autoincrement, category);")
+        self.cur.execute("CREATE TABLE tags(tagId integer primary key autoincrement, tag);")
         self.cur.execute("CREATE TABLE entries(entryId integer primary key autoincrement, time, entry);")
-        self.cur.execute("CREATE TABLE entry_category(entryCategoryId integer primary key autoincrement, entryId, categoryId);")
+        self.cur.execute("CREATE TABLE entry_tag(entryTagId integer primary key autoincrement, entryId, tagId);")
         self.con.commit()
 
     def list_all(self):
         ''' list all '''
         q = '''
-        SELECT entries.time, entries.entry, categories.category
+        SELECT entries.time, entries.entry, tags.tag
         FROM entries
-        JOIN entry_category
-          ON entry_category.entryId = entries.entryId
-        JOIN categories
-          ON entry_category.categoryId =
-        categories.categoryId;
+        JOIN entry_tag
+          ON entry_tag.entryId = entries.entryId
+        JOIN tags
+          ON entry_tag.tagId =
+        tags.tagId;
         '''
         self.fyi(q)
         res = self.cur.execute(q).fetchall()
         self.con.commit()
         return(res)
 
-    def list_categories(self):
-        ''' Return alphabetized list of categories '''
+    def list_tags(self):
+        ''' Return alphabetized list of tags '''
         names = []
         try:
-            for n in self.cur.execute("SELECT category FROM categories;").fetchall():
+            for n in self.cur.execute("SELECT tag FROM tags;").fetchall():
                 # Strip out leading and trailing whitespaces (can be artifacts of old data)
                 k = n[0].strip()
                 if len(k):
                     names.extend([k])
         except:
-            self.error("ERROR: cannot find database table 'categories'")
+            self.error("ERROR: cannot find database table 'tags'")
         names = list(set(names)) # remove duplicates
         names = sorted(names, key=lambda s: s.lower())
         return(names)
