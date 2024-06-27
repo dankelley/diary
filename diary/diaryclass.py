@@ -127,7 +127,7 @@ class Diary:
                 self.cur.execute("INSERT INTO tags(tag) VALUES(?);", (tag))
                 self.con.commit()
             except:
-                self.fyi("Error adding a tag named '%s'" % tag)
+                self.error("Cannot add tag '%s'" % tag)
 
 
     def initialize(self):
@@ -143,7 +143,7 @@ class Diary:
     def list_all(self):
         ''' list all '''
         q = '''
-        SELECT entries.time, entries.entry, tags.tag
+        SELECT entries.entryId, entries.time, entries.entry, tags.tag
         FROM entries
         JOIN entry_tag
           ON entry_tag.entryId = entries.entryId
@@ -155,6 +155,34 @@ class Diary:
         res = self.cur.execute(q).fetchall()
         self.con.commit()
         return(res)
+
+    def get_table(self, tablename):
+        res = self.cur.execute("SELECT * from %s;" % tablename).fetchall()
+        self.con.commit()
+        return(res)
+
+    def dan1(self):
+        ''' FIXME '''
+        entries = self.cur.execute("SELECT * FROM entries;").fetchall()
+        entry_tags = self.cur.execute("SELECT * FROM entry_tag;").fetchall()
+        print(entry_tags)
+        tags = self.cur.execute("SELECT * FROM tags;").fetchall()
+        self.con.commit()
+        print("tags: %s" % tags)
+        for entry in entries:
+            (Id, Time, Text) = entry
+            print("***\n%d; %s; %s" % (Id, Time, Text))
+            #Tag = []
+            tags = self.cur.execute("SELECT * FROM tags WHERE entryId=%d;" % Id).fetchall()
+            self.con.commit()
+            print("tags: %s" % tags)
+            #j = entry_tag[2]
+            #Tag.append(tags[j]) #entry_tag[2]])
+            #print(Tag)
+            #look = entry_tag = id
+            #print(look)
+            #print(entry_tag[0])
+            #d = entry_tag[entry[0],]
 
     def list_tags(self):
         ''' Return alphabetized list of tags '''
