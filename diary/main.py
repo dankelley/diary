@@ -27,16 +27,22 @@ def diary():
     parser.add_argument("--database", type=str, default=None,
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
-    parser.add_argument("--list", action="store_true", help="list entries")
+    parser.add_argument("--list", action="store_true", help="Print entries")
+    parser.add_argument("--export", action="store_true",
+                        help="Print entries in CSV format")
     parser.add_argument("words", type=str, nargs="*",
                         help="Entry, optionally with tags following ':'")
     args = parser.parse_args()
-    if ":" in args.words:
-        start = args.words.index(":") + 1
-        tags = args.words[start:len(args.words)]
-        entry = ' '.join(map(str, args.words[0:start-1]))
+    if args.words:
+        if ":" in args.words:
+            start = args.words.index(":") + 1
+            tags = args.words[start:len(args.words)]
+            entry = ' '.join(map(str, args.words[0:start-1]))
+        else:
+            entry = ' '.join(map(str, args.words))
+            tags = []
     else:
-        entry = ' '.join(map(str, args.words))
+        entry = []
         tags = []
     if args.debug:
         print("  entry: %s" % entry)
@@ -46,17 +52,13 @@ def diary():
     diary = Diary(debug=args.debug, db=args.database)
     if args.debug:
         print("  database: '%s'" % args.database)
-    if args.list:
+    if args.list or args.export:
         if args.words:
             print("FIXME: --list needs to handle words and tags.  FYI, words are:")
             print(args.words)
             start = args.words.index(":") + 1
             tags = args.words[start:len(args.words)]
             entry = ' '.join(map(str, args.words[0:start-1]))
-            print("entry:")
-            print(entry)
-            print("tags:")
-            print(tags)
         tags = diary.get_table("tags")
         entries = diary.get_table("entries")
         entry_tags = diary.get_table("entry_tag")
@@ -67,6 +69,7 @@ def diary():
             print(entries)
             print("entry_tags: ", end="")
             print(entry_tags)
+        # put tags in a dictionary, for easier lookup
         taglist = {}
         for tag in tags:
             taglist[tag[0]] = tag[1]
@@ -76,11 +79,24 @@ def diary():
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-            print("%s %s" % (entry[1], entry[2]), end = "")
-            if tags:
-                print(" : ", end="")
-                for tag in tags:
-                    print(tag, end=" ")
-            print()
+            if args.list: # pretty printing format
+                print("%s %s" % (entry[1], entry[2]), end="")
+                if tags:
+                    print(" : ", end="")
+                    for tag in tags:
+                        print(tag, end=" ")
+                print()
+            else: # export to csv
+                print("\"%s\",\"%s\"" % (entry[1], entry[2]), end="")
+                if tags:
+                    print(",\"", end="")
+                    print(",".join(tags), end="")
+                    print("\"", end="")
+                else:
+                    print(",\"\"", end="")
+                print("")
     else:
-        diary.add_entry(entry, tags)
+        if args.words:
+            diary.add_entry(entry, tags)
+        else:
+            print("Try -h to learn how to use this")

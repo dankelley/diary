@@ -21,6 +21,14 @@ Add an entry that has a two categories.
 
     diary I ate a salad for lunch. : food healthy
 
+Export all entries in CSV format
+
+    diary --export > backup.csv
+
+Import a previous export
+
+    diary --import < backup.csv # FIXME: code this
+
 See all entries
 
     diary --list
@@ -44,4 +52,5 @@ Testing
     c
     echo "select time,entry,category FROM entries JOIN categories ON entry_category.entryId = categories.categoryId;"|sqlite3 ~/Dropbox/diary.db
     b --list
+    b --export
 
