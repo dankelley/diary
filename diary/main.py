@@ -47,6 +47,16 @@ def diary():
     if args.debug:
         print("  database: '%s'" % args.database)
     if args.list:
+        if args.words:
+            print("FIXME: --list needs to handle words and tags.  FYI, words are:")
+            print(args.words)
+            start = args.words.index(":") + 1
+            tags = args.words[start:len(args.words)]
+            entry = ' '.join(map(str, args.words[0:start-1]))
+            print("entry:")
+            print(entry)
+            print("tags:")
+            print(tags)
         tags = diary.get_table("tags")
         entries = diary.get_table("entries")
         entry_tags = diary.get_table("entry_tag")
