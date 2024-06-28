@@ -27,11 +27,11 @@ See all entries
 
 See entries with `salad` in the content(note coded yet)
 
-    diary --list salad
+    diary --list salad # DOES NOT WORK YET
 
 See entries with tag `food` (note coded yet)
 
-    diary --list : food
+    diary --list : food # DOES NOT WORK YET
 
 Testing
 
@@ -43,4 +43,5 @@ Testing
     b dog with no categories
     c
     echo "select time,entry,category FROM entries JOIN categories ON entry_category.entryId = categories.categoryId;"|sqlite3 ~/Dropbox/diary.db
+    b --list
 

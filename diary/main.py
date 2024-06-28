@@ -48,49 +48,29 @@ def diary():
         print("  database: '%s'" % args.database)
     if args.list:
         tags = diary.get_table("tags")
-        print("tags: ", end="")
-        print(tags)
-        print("entries: ", end="")
         entries = diary.get_table("entries")
-        print(entries)
-        print("entry_tags: ", end="")
         entry_tags = diary.get_table("entry_tag")
-        print(entry_tags)
+        if args.debug:
+            print("tags: ", end="")
+            print(tags)
+            print("entries: ", end="")
+            print(entries)
+            print("entry_tags: ", end="")
+            print(entry_tags)
         taglist = {}
         for tag in tags:
             taglist[tag[0]] = tag[1]
-        #print(taglist)
         for entry in entries:
-            #print(entry)
             entryId = entry[0]
-            #print("  entryId %d" % entryId)
-            #print(tags[0])
-            #print("  ", tags[0][0])
-            #print("  ", tags[0][1])
             tags = []
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-                    #matchingtag = next((x[2] for x in entry_tags if x[1] == entryId), 0)
-                    #print("matchingtag follows")
-                    #print(matchingtag)
-                    #tagId = entry_tag[2]
-                    #print("  tagId=%d" % tagId)
-                    ##print("  %s" % tags[tagId][1])
-                    #print("  %s" % tags[tagId][1])
-            print(entry, end = "")
-            print(tags)
-        exit(3)
-        rows = diary.list_all()
-        print("FIXME: --list")
-        tags = []
-        for row in rows:
-            if row[0] == idLast:
-                tags.append(tag)
-            else:
-                print("  tags: ", tags, end="\n")
-                (id, time, item, tag) = row
-                tags = []
-            idLast = row[0]
+            print("%s %s" % (entry[1], entry[2]), end = "")
+            if tags:
+                print(" : ", end="")
+                for tag in tags:
+                    print(tag, end=" ")
+            print()
     else:
         diary.add_entry(entry, tags)
