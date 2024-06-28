@@ -35,11 +35,19 @@ See all entries
 
 See entries with `salad` in the content(note coded yet)
 
-    diary --list salad # DOES NOT WORK YET
+    diary --list salad # FIXME: DOES NOT WORK YET
 
 See entries with tag `food` (note coded yet)
 
-    diary --list : food # DOES NOT WORK YET
+    diary --list : food # FIXME: DOES NOT WORK YET
+
+Export database to a csv file, then reread it into a new database.
+This could be useful in transporting files. Note that the original
+times of the entries are preserved in the new database.
+
+    diary --writeCSV > ~/diary.csv
+    diary --database ~/new.db --readCSV ~/diary.csv
+
 
 Testing
 

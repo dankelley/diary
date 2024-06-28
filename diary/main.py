@@ -5,6 +5,7 @@ import argparse
 import sys
 import json
 import os
+from csv import reader
 from re import split
 import textwrap
 import datetime
@@ -28,8 +29,11 @@ def diary():
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
     parser.add_argument("--list", action="store_true", help="Print entries")
-    parser.add_argument("--export", action="store_true",
-                        help="Print entries in CSV format")
+    parser.add_argument("--writeCSV", action="store_true",
+                        help="Write entries to a CSV format that can be read with --readCSV.")
+    parser.add_argument("--readCSV", type=str, default = None,
+                        help="Read CSV information into database, reversing --writeCSV action.",
+                        metavar="file.csv")
     parser.add_argument("words", type=str, nargs="*",
                         help="Entry, optionally with tags following ':'")
     args = parser.parse_args()
@@ -52,7 +56,18 @@ def diary():
     diary = Diary(debug=args.debug, db=args.database)
     if args.debug:
         print("  database: '%s'" % args.database)
-    if args.list or args.export:
+
+    if args.readCSV:
+        with open(args.readCSV) as csv:
+            rows = reader(csv)
+            for row in rows:
+                (time, entry, tagsWithCommas) = row
+                #print("<%s> <%s> <%s>" % (time, entry, tagsWithCommas))
+                tags = tagsWithCommas.split(',')
+                #print(tags)
+                diary.add_entry(time, entry, tags)
+
+    if args.list or args.writeCSV:
         if args.words:
             print("FIXME: --list needs to handle words and tags.  FYI, words are:")
             print(args.words)
@@ -97,6 +112,7 @@ def diary():
                 print("")
     else:
         if args.words:
-            diary.add_entry(entry, tags)
+            time = datetime.datetime.now()
+            diary.add_entry(time, entry, tags)
         else:
             print("Try -h to learn how to use this")

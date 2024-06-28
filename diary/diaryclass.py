@@ -85,11 +85,10 @@ class Diary:
     def version(self):
         return("nota version %d.%d.%d" % (self.appversion[0], self.appversion[1], self.appversion[2]))
 
-    def add_entry(self, entry, tags):
+    def add_entry(self, time, entry, tags):
         self.fyi("add_entry...")
         self.fyi("  entry: %s" % entry)
         self.fyi("  tags:  %s" % tags)
-        time = datetime.datetime.now()
         self.cur.execute("INSERT INTO entries(time,entry) VALUES(?,?);", (time, entry))
         entryId = self.cur.lastrowid
         self.fyi("entryID %d" % entryId)
