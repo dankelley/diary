@@ -62,7 +62,10 @@ During testing, the following proved helpful. Note that it starts by
 destroying the database!!
 
     alias ,a='\rm ~/Dropbox/diary.db'
-    alias ,d='PYTHONPATH=/Users/kelley/git/diary python3 -m diary'
+    # rapid testing: do next if in diary directory
+    #alias ,d='PYTHONPATH=/Users/kelley/git/diary python3 -m diary'
+    # after-installation testing
+    alias ,d='diary'
     alias ,c='echo .dump|sqlite3 ~/Dropbox/diary.db'
     ,a # clean database
     ,d tweet or caw : bird sound
