@@ -109,7 +109,7 @@ class Diary:
             tagId = self.cur.execute("SELECT tagId FROM tags WHERE tag='%s';" % tag).fetchall()[0]
             self.con.commit()
             self.fyi("tagId %d" % tagId)
-            self.cur.execute("INSERT INTO entry_tag(entryId,tagId) VALUES(?,?);", (entryId, tagId[0]))
+            self.cur.execute("INSERT INTO entry_tags(entryId,tagId) VALUES(?,?);", (entryId, tagId[0]))
             self.con.commit()
         self.fyi("done adding")
 
@@ -136,7 +136,7 @@ class Diary:
                 (self.appversion[0], self.appversion[1], self.appversion[2]))
         self.cur.execute("CREATE TABLE tags(tagId integer primary key autoincrement, tag);")
         self.cur.execute("CREATE TABLE entries(entryId integer primary key autoincrement, time, entry);")
-        self.cur.execute("CREATE TABLE entry_tag(entryTagId integer primary key autoincrement, entryId, tagId);")
+        self.cur.execute("CREATE TABLE entry_tags(entryTagId integer primary key autoincrement, entryId, tagId);")
         self.con.commit()
 
     def list_all(self):
@@ -144,10 +144,10 @@ class Diary:
         q = '''
         SELECT entries.entryId, entries.time, entries.entry, tags.tag
         FROM entries
-        JOIN entry_tag
-          ON entry_tag.entryId = entries.entryId
+        JOIN entry_tags
+          ON entry_tags.entryId = entries.entryId
         JOIN tags
-          ON entry_tag.tagId =
+          ON entry_tags.tagId =
         tags.tagId;
         '''
         self.fyi(q)
@@ -158,30 +158,24 @@ class Diary:
     def get_table(self, tablename):
         res = self.cur.execute("SELECT * from %s;" % tablename).fetchall()
         self.con.commit()
+
         return(res)
 
-    def dan1(self):
-        ''' FIXME '''
-        entries = self.cur.execute("SELECT * FROM entries;").fetchall()
-        entry_tags = self.cur.execute("SELECT * FROM entry_tag;").fetchall()
-        print(entry_tags)
-        tags = self.cur.execute("SELECT * FROM tags;").fetchall()
+
+    def get_tags_with_counts(self):
+        ''' Get tags, with counts. '''
+        q = '''
+        SELECT tags.tag,count(tags.tag)
+        FROM tags
+        JOIN entry_tags
+        ON tags.tagId = entry_tags.tagId
+        GROUP BY tags.tagId, entry_tags.tagId
+        '''
+        res = self.cur.execute(q).fetchall()
+        res = sorted(res, key=lambda res: res[0])
         self.con.commit()
-        print("tags: %s" % tags)
-        for entry in entries:
-            (Id, Time, Text) = entry
-            print("***\n%d; %s; %s" % (Id, Time, Text))
-            #Tag = []
-            tags = self.cur.execute("SELECT * FROM tags WHERE entryId=%d;" % Id).fetchall()
-            self.con.commit()
-            print("tags: %s" % tags)
-            #j = entry_tag[2]
-            #Tag.append(tags[j]) #entry_tag[2]])
-            #print(Tag)
-            #look = entry_tag = id
-            #print(look)
-            #print(entry_tag[0])
-            #d = entry_tag[entry[0],]
+        return(res)
+
 
     def list_tags(self):
         ''' Return alphabetized list of tags '''

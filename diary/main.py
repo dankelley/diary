@@ -24,7 +24,8 @@ def diary():
     parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=textwrap.dedent("FIXME: explain more here"))
-    parser.add_argument("--debug", action="store_true", help="turn on tracer information")
+    parser.add_argument("--debug", action="store_true", help="Turn on tracer information.")
+    parser.add_argument("--tags", action="store_true", help="Show tags in database, with counts.")
     parser.add_argument("--database", type=str, default=None,
                         help="database location (defaults to %s)" % defaultDatabase,
                         metavar="filename")
@@ -57,6 +58,12 @@ def diary():
     if args.debug:
         print("  database: '%s'" % args.database)
 
+    if args.tags:
+        print("Tags in database, with counts:")
+        for row in diary.get_tags_with_counts():
+            print(" %10s: %d" % (row[0], row[1]))
+        exit(0)
+
     if args.readCSV:
         with open(args.readCSV) as csv:
             rows = reader(csv)
@@ -76,7 +83,7 @@ def diary():
             entry = ' '.join(map(str, args.words[0:start-1]))
         tags = diary.get_table("tags")
         entries = diary.get_table("entries")
-        entry_tags = diary.get_table("entry_tag")
+        entry_tags = diary.get_table("entry_tags")
         if args.debug:
             print("tags: ", end="")
             print(tags)
