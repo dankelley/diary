@@ -61,16 +61,15 @@ times of the entries are preserved in the new database.
 During testing, the following proved helpful. Note that it starts by
 destroying the database!!
 
-    alias a='\rm ~/Dropbox/diary.db'
-    alias b='PYTHONPATH=/Users/kelley/git/diary python3 -m diary'
-    alias c='echo .dump|sqlite3 ~/Dropbox/diary.db'
-    b tweet or caw : bird sound
-    b meow : cat sound animal
-    b dog with no categories
-    c
-    b --list
-    b --export
-    b --tags
-    b --writeCSV > ~/diary.csv
-    b --database ~/new.db --readCSV ~/diary.csv
-
+    alias ,a='\rm ~/Dropbox/diary.db'
+    alias ,d='PYTHONPATH=/Users/kelley/git/diary python3 -m diary'
+    alias ,c='echo .dump|sqlite3 ~/Dropbox/diary.db'
+    ,a # clean database
+    ,d tweet or caw : bird sound
+    ,d meow : cat sound animal
+    ,d dog with no categories
+    ,c
+    ,d --list
+    ,d --tags
+    ,d --writeCSV > ~/diary.csv
+    ,d --database ~/new.db --readCSV ~/diary.csv

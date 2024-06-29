@@ -2,7 +2,7 @@
 
 import sys
 import sqlite3 as sqlite
-import datetime
+#import datetime
 import os.path
 #import difflib
 #from distutils.version import StrictVersion
@@ -49,7 +49,7 @@ class Diary:
         self.cur = con.cursor()
         self.authorId = authorId
         ## 0.3: add note.modified column
-        self.appversion = [0, 1, 0] # db schema changes always yield first or second digit increment
+        self.appversion = [0, 1, 0] # db schema changes yield first or second digit increment
         self.dbversion = self.appversion
         if mustInitialize:
             self.initialize()
