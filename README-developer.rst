@@ -34,7 +34,7 @@ Several manual steps are required.
 2. Ensure that `README.md` has an entry for the version.
 3. Ensure that the version numbers in the present document are updated, so that
    cut/paste will work for local installations.
-4. Update the `self.appversion =` line in `nota/notaclass.py` for the new version. Look
+4. Update the `self.appversion =` line in `diary/diaryclass.py` for the new version. Look
    carefully at the nearby code, if changes have been made to the database.
 5. Remove old files from the `dist/` directory.
 6. Perform the steps listed under "Packaging" and "Installing package locally" below.
@@ -70,7 +70,7 @@ To install a local test version, do e.g. (with the up-to-date version number, if
 
 ::
 
-    sudo -H pip3 install dist/diary-0.1.0.tar.gz --upgrade
+    sudo -H pip3 install dist/diary-0.0.1.tar.gz --upgrade
 
 
 Installing package on pypi.python
@@ -86,12 +86,12 @@ then do:
 
 
 **Reminder** After uploading, be sure to increment the version number (a) in
-line 4 of setup.py, (b) in the present file and (c) in nota/notaclass.py where
+line 4 of setup.py, (b) in the present file and (c) in diary/diaryclass.py where
 self.appversion is define. Then add a blank entry for this new version, in
 README.rst.
 
 
-Suggested aliases for nota
+Suggested aliases for diary
 --------------------------
 
 The developer uses the following, so that ``n`` runs the packaged version and
@@ -99,5 +99,5 @@ The developer uses the following, so that ``n`` runs the packaged version and
 
 ::
 
-    alias ,n='PYTHONPATH=~/git/diary python3 -m diary'
+    alias ,d='diary' # or, for debugging, 'PYTHONPATH=~/git/diary python3 -m diary'
 
