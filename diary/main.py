@@ -24,7 +24,7 @@ def diary():
     parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
             formatter_class=argparse.RawDescriptionHelpFormatter,
             epilog=textwrap.dedent("FIXME: explain more here"))
-    parser.add_argument("--debug", action="store_true", help="Turn on tracer information.")
+    parser.add_argument("-d", "--debug", action="store_true", help="Turn on tracer information.")
     parser.add_argument("--version", action="store_true", help="Show application version number.")
     parser.add_argument("--tags", action="store_true", help="Show tags in database, with counts.")
     parser.add_argument("--database", type=str, default=None,
@@ -115,14 +115,27 @@ def diary():
 
 
     if args.list:
+        if args.debug:
+            print("handling --list")
+        tagSearch = []
+        entrySearch = ""
         if args.words:
-            print("FIXME: --list needs to handle words and tags.  FYI, words are:")
-            print(args.words)
-            start = args.words.index(":") + 1
-            tags = args.words[start:len(args.words)]
-            entry = ' '.join(map(str, args.words[0:start-1]))
-            print("next is tags")
-            print(tags)
+            #print("FIXME: --list needs to handle words and tags.  FYI, words are:")
+            if ":" in args.words:
+                start = args.words.index(":") + 1
+                tagSearch = args.words[start:len(args.words)]
+                entrySearch = ' '.join(map(str, args.words[0:start-1]))
+            else:
+                entrySearch = ' '.join(map(str, args.words))
+            if args.debug:
+                print("  args.words:  %s" % args.words)
+                print("  entrySearch: '%s'" % entrySearch)
+                print("  tagSearch:   %s" % tagSearch)
+            if tagSearch and len(tagSearch) > 1:
+                diary.error("cannot have more than 1 tag to search, but got: %s" % tagSearch)
+            # un-tuple it
+            if len(tagSearch) == 1:
+                tagSearch = tagSearch[0]
         tags = diary.get_table("tags")
         entries = diary.get_table("entries")
         entry_tags = diary.get_table("entry_tags")
@@ -137,18 +150,37 @@ def diary():
         taglist = {}
         for tag in tags:
             taglist[tag[0]] = tag[1]
+        if args.debug:
+            print("len(entrySearch): %s" % len(entrySearch))
+            print("len(tagSearch): %s" % len(tagSearch))
+            print("entrySearch: %s" % entrySearch)
+            print("tagSearch: %s" % tagSearch)
         for entry in entries:
             entryId = entry[0]
             tags = []
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-            print("%s %s" % (entry[1], entry[2]), end="")
-            if tags:
-                print(" : ", end="")
-                for tag in tags:
-                    print(tag, end=" ")
-            print()
+            showAll = 0 == len(entrySearch) and 0 == len(tagSearch)
+            showBasedOnEntry = 0 < len(entrySearch) and entrySearch in entry[2]
+            showBasedOnTag = 0 < len(tagSearch) and tagSearch in tags
+            show = showAll or showBasedOnEntry or showBasedOnTag
+            if args.debug:
+                print("  entrySearch:", entrySearch)
+                print("  entry: ", entry[2])
+                print("  tagSearch:", tagSearch)
+                print("  tags: ", tags)
+                print("  showAll: %d" % showAll)
+                print("  showBasedOnEntry: %d" % showBasedOnEntry)
+                print("  showBasedOnTag: %d" % showBasedOnTag)
+                print("  show: %d" % show)
+            if show:
+                print("%s %s" % (entry[1], entry[2]), end="")
+                if tags:
+                    print(" : ", end="")
+                    for tag in tags:
+                        print(tag, end=" ")
+                print()
         sys.exit(0) # handle --list
 
 

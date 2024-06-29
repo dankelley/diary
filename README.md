@@ -73,6 +73,8 @@ destroying the database!!
     ,d dog with no categories
     ,c
     ,d --list
+    ,d --list caw
+    ,d --list : sound
     ,d --tags
     ,d --writeCSV > ~/diary.csv
     ,d --database ~/new.db --readCSV ~/diary.csv
