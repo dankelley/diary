@@ -35,13 +35,13 @@ Nothing works yet!  Here are some samples.
 
     diary --list
 
-## See entries with `salad` in the content(note coded yet)
+## See entries with `caw` in the entry.
 
-    diary --list salad # FIXME: DOES NOT WORK YET
+    diary --list caw
 
-## See entries with tag `food` (note coded yet)
+## See entries with tag `sound`.
 
-    diary --list : food # FIXME: DOES NOT WORK YET
+    diary --list : sound
 
 ## Exporting to csv (and importing back)
 
