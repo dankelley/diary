@@ -79,6 +79,7 @@ def diary():
                 tags = tagsWithCommas.split(',')
                 #print(tags)
                 diary.add_entry(time, entry, tags)
+        sys.exit(0) # handle --readCSV
 
 
     # Write whole database to CSV

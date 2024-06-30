@@ -147,8 +147,8 @@ class Diary:
         JOIN entry_tags
           ON entry_tags.entryId = entries.entryId
         JOIN tags
-          ON entry_tags.tagId =
-        tags.tagId;
+          ON entry_tags.tagId = tags.tagId
+        ORDER BY entries.time;
         '''
         self.fyi(q)
         res = self.cur.execute(q).fetchall()
