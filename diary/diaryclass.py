@@ -2,20 +2,20 @@
 
 import sys
 import sqlite3 as sqlite
-#import datetime
+# import datetime
 import os.path
-#import difflib
-#from distutils.version import StrictVersion
-#import re
-#import tempfile
-#import subprocess
-#import hashlib
-#import random
-#import string
-#from math import trunc
+# import difflib
+# from distutils.version import StrictVersion
+# import re
+# import tempfile
+# import subprocess
+# import hashlib
+# import random
+# import string
+# from math import trunc
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 
-#reload(sys)
-#sys.setdefaultencoding('utf8')
 authorId = "Dan Kelley"
 
 class Diary:
