@@ -3,49 +3,64 @@
 from .diaryclass import Diary
 import argparse
 import sys
-import json
-import os
 from csv import reader
-from re import split
 import textwrap
 import datetime
-import tempfile
-from random import randint, seed
-from time import strptime
-import subprocess
 
 indent = "  "
 showRandomHint = False
 defaultDatabase = "~/Dropbox/diary.db"
 
+
 def diary():
-    #print("len(sys.argv) = %d" % len(sys.argv))
-    #print("sys.argv = %s" % sys.argv)
-    parser = argparse.ArgumentParser(prog="diary", description="Diary: a diary tool",
-            formatter_class=argparse.RawDescriptionHelpFormatter,
-            epilog=textwrap.dedent("FIXME: explain more here"))
-    parser.add_argument("-d", "--debug", action="store_true", help="Turn on tracer information.")
-    parser.add_argument("--version", action="store_true", help="Show application version number.")
-    parser.add_argument("--tags", action="store_true", help="Show tags in database, with counts.")
-    parser.add_argument("--database", type=str, default=None,
-                        help="database location (defaults to %s)" % defaultDatabase,
-                        metavar="filename")
+    # print("len(sys.argv) = %d" % len(sys.argv))
+    # print("sys.argv = %s" % sys.argv)
+    parser = argparse.ArgumentParser(
+        prog="diary",
+        description="Diary: a diary tool",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog=textwrap.dedent("FIXME: explain more here"),
+    )
+    parser.add_argument(
+        "-d", "--debug", action="store_true", help="Turn on tracer information."
+    )
+    parser.add_argument(
+        "--version", action="store_true", help="Show application version number."
+    )
+    parser.add_argument(
+        "--tags", action="store_true", help="Show tags in database, with counts."
+    )
+    parser.add_argument(
+        "--database",
+        type=str,
+        default=None,
+        help="database location (defaults to %s)" % defaultDatabase,
+        metavar="filename",
+    )
     parser.add_argument("--list", action="store_true", help="Print entries")
-    parser.add_argument("--writeCSV", action="store_true",
-                        help="Write entries to a CSV format that can be read with --readCSV.")
-    parser.add_argument("--readCSV", type=str, default = None,
-                        help="Read CSV information into database, reversing --writeCSV action.",
-                        metavar="file.csv")
-    parser.add_argument("words", type=str, nargs="*",
-                        help="Entry, optionally with tags following ':'")
+    parser.add_argument(
+        "--writeCSV",
+        action="store_true",
+        help="Write entries to a CSV format that can be read with --readCSV.",
+    )
+    parser.add_argument(
+        "--readCSV",
+        type=str,
+        default=None,
+        help="Read CSV information into database, reversing --writeCSV action.",
+        metavar="file.csv",
+    )
+    parser.add_argument(
+        "words", type=str, nargs="*", help="Entry, optionally with tags following ':'"
+    )
     args = parser.parse_args()
     if args.words:
         if ":" in args.words:
             start = args.words.index(":") + 1
-            tags = args.words[start:len(args.words)]
-            entry = ' '.join(map(str, args.words[0:start-1]))
+            tags = args.words[start : len(args.words)]
+            entry = " ".join(map(str, args.words[0 : start - 1]))
         else:
-            entry = ' '.join(map(str, args.words))
+            entry = " ".join(map(str, args.words))
             tags = []
     else:
         entry = []
@@ -68,19 +83,18 @@ def diary():
         print("Tags in database, with counts:")
         for row in diary.get_tags_with_counts():
             print(" %10s: %d" % (row[0], row[1]))
-        sys.exit(0) # handle --tags
+        sys.exit(0)  # handle --tags
 
     if args.readCSV:
         with open(args.readCSV) as csv:
             rows = reader(csv)
             for row in rows:
                 (time, entry, tagsWithCommas) = row
-                #print("<%s> <%s> <%s>" % (time, entry, tagsWithCommas))
-                tags = tagsWithCommas.split(',')
-                #print(tags)
+                # print("<%s> <%s> <%s>" % (time, entry, tagsWithCommas))
+                tags = tagsWithCommas.split(",")
+                # print(tags)
                 diary.add_entry(time, entry, tags)
-        sys.exit(0) # handle --readCSV
-
+        sys.exit(0)  # handle --readCSV
 
     # Write whole database to CSV
     if args.writeCSV:
@@ -104,16 +118,15 @@ def diary():
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-            print("\"%s\",\"%s\"" % (entry[1], entry[2]), end="")
+            print('"%s","%s"' % (entry[1], entry[2]), end="")
             if tags:
-                print(",\"", end="")
+                print(',"', end="")
                 print(",".join(tags), end="")
-                print("\"", end="")
+                print('"', end="")
             else:
-                print(",\"\"", end="")
+                print(',""', end="")
             print("")
-        sys.exit(0) # handle --writeCSV
-
+        sys.exit(0)  # handle --writeCSV
 
     if args.list:
         if args.debug:
@@ -121,19 +134,21 @@ def diary():
         tagSearch = []
         entrySearch = ""
         if args.words:
-            #print("FIXME: --list needs to handle words and tags.  FYI, words are:")
+            # print("FIXME: --list needs to handle words and tags.  FYI, words are:")
             if ":" in args.words:
                 start = args.words.index(":") + 1
-                tagSearch = args.words[start:len(args.words)]
-                entrySearch = ' '.join(map(str, args.words[0:start-1]))
+                tagSearch = args.words[start : len(args.words)]
+                entrySearch = " ".join(map(str, args.words[0 : start - 1]))
             else:
-                entrySearch = ' '.join(map(str, args.words))
+                entrySearch = " ".join(map(str, args.words))
             if args.debug:
                 print("  args.words:  %s" % args.words)
                 print("  entrySearch: '%s'" % entrySearch)
                 print("  tagSearch:   %s" % tagSearch)
             if tagSearch and len(tagSearch) > 1:
-                diary.error("cannot have more than 1 tag to search, but got: %s" % tagSearch)
+                diary.error(
+                    "cannot have more than 1 tag to search, but got: %s" % tagSearch
+                )
             # un-tuple it
             if len(tagSearch) == 1:
                 tagSearch = tagSearch[0]
@@ -182,8 +197,7 @@ def diary():
                     for tag in tags:
                         print(tag, end=" ")
                 print()
-        sys.exit(0) # handle --list
-
+        sys.exit(0)  # handle --list
 
     # Database insertion
     elif args.words:
