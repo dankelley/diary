@@ -127,7 +127,7 @@ class Diary:
                 self.error("Cannot add tag '%s'" % tag)
 
     def initialize(self):
-        """Initialize the database.  This is dangerous since it removes any existing content."""
+        """Initialize the database"""
         self.cur.execute("CREATE TABLE version(major, minor, subminor);")
         self.cur.execute(
             "INSERT INTO version(major, minor, subminor) VALUES (?,?,?);",
