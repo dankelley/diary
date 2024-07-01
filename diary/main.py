@@ -41,6 +41,13 @@ def diary():
     )
     parser.add_argument("--list", action="store_true", help="Print entries")
     parser.add_argument(
+        "--since",
+        type=str,
+        nargs=1,
+        help="Restrict --list to a recent time interval, specified as yyyy-mm-dd.",
+        metavar="yyyy-mm-dd",
+    )
+    parser.add_argument(
         "--writeCSV",
         action="store_true",
         help="Write entries to a CSV format that can be read with --readCSV.",
@@ -107,6 +114,13 @@ def diary():
             print(" %10s: %d" % (row[0], row[1]))
         sys.exit(0)  # handle --tags
 
+    since = None
+    if args.since:
+        #print("DAN in --since with \"%s\"" % args.since[0])
+        since = datetime.datetime.strptime(args.since[0][0:10], "%Y-%m-%d")
+        #print("got since %s" % since)
+
+
     if args.readCSV:
         with open(args.readCSV) as csv:
             rows = reader(csv)
@@ -152,7 +166,7 @@ def diary():
 
     if args.list:
         if args.debug:
-            print("handling --list")
+            print("handling --list with --since=%s" % since)
         tagSearch = []
         entrySearch = ""
         if args.words:
@@ -202,7 +216,19 @@ def diary():
             showAll = 0 == len(entrySearch) and 0 == len(tagSearch)
             showBasedOnEntry = 0 < len(entrySearch) and entrySearch in entry[2]
             showBasedOnTag = 0 < len(tagSearch) and tagSearch in tags
-            show = showAll or showBasedOnEntry or showBasedOnTag
+            entry1 = entry[1][0:10]
+            #print("  entry1 '%s'" % entry1)
+            entryTime = datetime.datetime.strptime(entry1, "%Y-%m-%d")
+            #print("  entryTime '%s'" % entryTime)
+            #print(entryTime)
+            #print(type(entryTime))
+            #print("  since '%s'" % since)
+            #print(since)
+            #print(type(since))
+            #print("  entryTime exceeds since '%s'" % (entryTime > since))
+            showBasedOnTime = (not since) or entryTime > since
+            #print("showBasedOnTime %s" % showBasedOnTime)
+            show = (showAll or showBasedOnEntry or showBasedOnTag) and showBasedOnTime
             if args.debug:
                 print("  entrySearch:", entrySearch)
                 print("  entry: ", entry[2])
