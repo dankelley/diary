@@ -43,6 +43,10 @@ Nothing works yet!  Here are some samples.
 
     diary --list : sound
 
+## Rename a tag.
+
+    diary --rename-tag oldName newName
+
 ## Exporting to csv (and importing back)
 
 Export database to a csv file, then reread it into a new database.

@@ -22,13 +22,9 @@ def diary():
         epilog=textwrap.dedent("FIXME: explain more here"),
     )
     parser.add_argument(
-        "-d", "--debug", action="store_true", help="Turn on tracer information."
-    )
-    parser.add_argument(
-        "--version", action="store_true", help="Show application version number."
-    )
-    parser.add_argument(
-        "--tags", action="store_true", help="Show tags in database, with counts."
+        "--debug",
+        action="store_true",
+        help="Turn on tracer information.",
     )
     parser.add_argument(
         "--database",
@@ -36,6 +32,12 @@ def diary():
         default=None,
         help="database location (defaults to %s)" % defaultDatabase,
         metavar="filename",
+    )
+    parser.add_argument(
+        "--version", action="store_true", help="Show application version number."
+    )
+    parser.add_argument(
+        "--tags", action="store_true", help="Show tags in database, with counts."
     )
     parser.add_argument("--list", action="store_true", help="Print entries")
     parser.add_argument(
@@ -49,6 +51,13 @@ def diary():
         default=None,
         help="Read CSV information into database, reversing --writeCSV action.",
         metavar="file.csv",
+    )
+    parser.add_argument(
+        "--renameTag",
+        type=str,
+        nargs=2,
+        help="Rename a tag.",
+        metavar=("old", "new"),
     )
     parser.add_argument(
         "words", type=str, nargs="*", help="Entry, optionally with tags following ':'"
@@ -71,6 +80,19 @@ def diary():
     if not args.database:
         args.database = defaultDatabase
     diary = Diary(debug=args.debug, db=args.database)
+
+    if args.renameTag:
+        if args.words:
+            diary.error("extra words after '--rename-tags old new'")
+
+        diary.rename_tag(args.renameTag[0], args.renameTag[1])
+        # print("DAN '%s' '%s'" % (old, new))
+        # if old in tagNames:
+        #    print("found old")
+        # else:
+        #    diary.error("tag '%s' does not exist" % old)
+        exit(0)
+
     if args.debug:
         print("  database: '%s'" % args.database)
 

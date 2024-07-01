@@ -78,6 +78,17 @@ class Diary:
             self.appversion[2],
         )
 
+    def rename_tag(self, old, new):
+        self.fyi("rename_tag with old='%s' and new='%s'" % (old, new))
+        tagNames = [tag[1] for tag in self.get_table("tags")]
+        if old not in tagNames:
+            self.error('There is no tag named "%s"' % old)
+        else:
+            q = "UPDATE tags SET tag = '%s' WHERE tag = '%s';" % (new, old)
+            self.fyi(q)
+            self.cur.execute(q)
+            self.con.commit()
+
     def add_entry(self, time, entry, tags):
         self.fyi("add_entry...")
         self.fyi("  entry: %s" % entry)
