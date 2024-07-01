@@ -6,10 +6,46 @@ import sys
 from csv import reader
 import textwrap
 import datetime
+import json
+from os import path
 
-indent = "  "
-showRandomHint = False
-defaultDatabase = "~/Dropbox/diary.db"
+rcfile = "~/.diaryrc"  # can define next 2 items
+defaultDatabase = "~/diary.db"
+separator = ":"
+try:
+    f = open(path.expanduser(rcfile))
+    rc = json.load(f)
+    try:
+        tmp = rc["database"]
+        defaultDatabase = tmp
+    except KeyError:
+        pass
+    try:
+        tmp = rc["separator"]
+        separator = tmp
+    except KeyError:
+        pass
+    # defaultDatabase
+except IOError:
+    pass
+
+overallHelp = '''
+Some features of how diary works can be customized with a file
+in the user's top-level directory, called `.diaryrc`. The items that
+can be specified there are illustrated below.  The `separator` token
+may be used instead of `:`, to separate the entry text from the list
+of tags. Note that the operating system might interpret this token
+in surprising ways, e.g. using `"."` will result in an error, because
+unix operating systems take that letter to mean the name of the
+present directory. In the example below, the default location is
+changed to be in a Dropbox directory, which can be convenient for
+sharing across computers.
+
+    {
+        "separator": "/",
+        "database": "~/Dropbox/diary.db"
+    }
+'''
 
 
 def diary():
@@ -19,7 +55,7 @@ def diary():
         prog="diary",
         description="Diary: a diary tool",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=textwrap.dedent("FIXME: explain more here"),
+        epilog=textwrap.dedent(overallHelp),
     )
     parser.add_argument(
         "--debug",
@@ -71,8 +107,8 @@ def diary():
     )
     args = parser.parse_args()
     if args.words:
-        if ":" in args.words:
-            start = args.words.index(":") + 1
+        if separator in args.words:
+            start = args.words.index(separator) + 1
             tags = args.words[start : len(args.words)]
             entry = " ".join(map(str, args.words[0 : start - 1]))
         else:
@@ -82,6 +118,8 @@ def diary():
         entry = []
         tags = []
     if args.debug:
+        print("  separator %s" % separator)
+        print("  defaultDatabase %s" % defaultDatabase)
         print("  entry: %s" % entry)
         print("  tags:  %s" % tags)
     if not args.database:
@@ -175,8 +213,8 @@ def diary():
         entrySearch = ""
         if args.words:
             # print("FIXME: --list needs to handle words and tags.  FYI, words are:")
-            if ":" in args.words:
-                start = args.words.index(":") + 1
+            if separator in args.words:
+                start = args.words.index(separator) + 1
                 tagSearch = args.words[start : len(args.words)]
                 entrySearch = " ".join(map(str, args.words[0 : start - 1]))
             else:
