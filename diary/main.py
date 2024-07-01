@@ -44,7 +44,7 @@ def diary():
         "--since",
         type=str,
         nargs=1,
-        help="Restrict --list to a recent time interval, specified as yyyy-mm-dd.",
+        help="Restrict --list to a recent time interval, as yyyy-mm-dd or 'yyyy-mm-dd HH:MM:SS'",
         metavar="yyyy-mm-dd",
     )
     parser.add_argument(
@@ -116,10 +116,14 @@ def diary():
 
     since = None
     if args.since:
-        #print("DAN in --since with \"%s\"" % args.since[0])
-        since = datetime.datetime.strptime(args.since[0][0:10], "%Y-%m-%d")
-        #print("got since %s" % since)
-
+        # print("DAN in --since with \"%s\"" % args.since[0])
+        tmp = args.since[0]
+        if len(tmp) == 10:
+            since = datetime.datetime.strptime(tmp, "%Y-%m-%d")
+        else:
+            since = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
+        if args.debug:
+            print("  --since with cutoff time %s" % since)
 
     if args.readCSV:
         with open(args.readCSV) as csv:
@@ -216,18 +220,24 @@ def diary():
             showAll = 0 == len(entrySearch) and 0 == len(tagSearch)
             showBasedOnEntry = 0 < len(entrySearch) and entrySearch in entry[2]
             showBasedOnTag = 0 < len(tagSearch) and tagSearch in tags
-            entry1 = entry[1][0:10]
-            #print("  entry1 '%s'" % entry1)
-            entryTime = datetime.datetime.strptime(entry1, "%Y-%m-%d")
-            #print("  entryTime '%s'" % entryTime)
-            #print(entryTime)
-            #print(type(entryTime))
-            #print("  since '%s'" % since)
-            #print(since)
-            #print(type(since))
-            #print("  entryTime exceeds since '%s'" % (entryTime > since))
+            tmp = entry[1]
+            if len(tmp) == 10:
+                entryTime = datetime.datetime.strptime(tmp, "%Y-%m-%d")
+            else:
+                tmp = tmp.split(".")[0]
+                entryTime = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
+            # entry1 = entry[1][0:10]
+            # print("  entry1 '%s'" % entry1)
+            # entryTime = datetime.datetime.strptime(entry1, "%Y-%m-%d")
+            # print("  entryTime '%s'" % entryTime)
+            # print(entryTime)
+            # print(type(entryTime))
+            # print("  since '%s'" % since)
+            # print(since)
+            # print(type(since))
+            # print("  entryTime exceeds since '%s'" % (entryTime > since))
             showBasedOnTime = (not since) or entryTime > since
-            #print("showBasedOnTime %s" % showBasedOnTime)
+            # print("showBasedOnTime %s" % showBasedOnTime)
             show = (showAll or showBasedOnEntry or showBasedOnTag) and showBasedOnTime
             if args.debug:
                 print("  entrySearch:", entrySearch)
