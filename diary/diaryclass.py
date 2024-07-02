@@ -169,10 +169,13 @@ class Diary:
         self.fyi(q)
         res = self.cur.execute(q).fetchall()
         self.con.commit()
-        return res
+        return res  # list_all
 
     def get_table(self, tablename):
-        res = self.cur.execute("SELECT * from %s;" % tablename).fetchall()
+        if tablename == "entries":
+            res = self.cur.execute("SELECT * from %s ORDER BY time;" % tablename).fetchall()
+        else:
+            res = self.cur.execute("SELECT * from %s;" % tablename).fetchall()
         self.con.commit()
         return res
 
