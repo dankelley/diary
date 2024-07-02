@@ -36,7 +36,7 @@ overallHelp = '''
 Some features of how diary works can be customized with a file in the
 user's top-level directory, called `.diaryrc`. This file must be
 written in JSON format, as in the example below. So far, the only
-element that can be altered is the defaulf database name.
+element that can be altered is the default database name.
 
     {
         "database": "~/Dropbox/diary.db"
@@ -65,11 +65,9 @@ other databases.
 
 
 def diary():
-    # print("len(sys.argv) = %d" % len(sys.argv))
-    # print("sys.argv = %s" % sys.argv)
     parser = argparse.ArgumentParser(
         prog="diary",
-        description="Diary: a diary tool",
+        description="Diary: a commandline tool for adding entries to a diary database.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent(overallHelp),
     )
@@ -119,7 +117,8 @@ def diary():
         metavar=("old", "new"),
     )
     parser.add_argument(
-        "words", type=str, nargs="*", help="Entry, optionally with tags following ':'"
+        "words", type=str, nargs="*",
+        help="Diary entry, in the form of words that are optionally followed by tags, following a ':' character."
     )
     args = parser.parse_args()
     if args.words:
@@ -147,11 +146,6 @@ def diary():
             diary.error("extra words after '--rename-tags old new'")
 
         diary.rename_tag(args.renameTag[0], args.renameTag[1])
-        # print("DAN '%s' '%s'" % (old, new))
-        # if old in tagNames:
-        #    print("found old")
-        # else:
-        #    diary.error("tag '%s' does not exist" % old)
         exit(0)
 
     if args.debug:
@@ -170,7 +164,6 @@ def diary():
 
     since = None
     if args.since:
-        # print("DAN in --since with \"%s\"" % args.since[0])
         tmp = args.since[0]
         if len(tmp) == 10:
             since = datetime.datetime.strptime(tmp, "%Y-%m-%d")
@@ -228,7 +221,6 @@ def diary():
         tagSearch = []
         entrySearch = ""
         if args.words:
-            # print("FIXME: --list needs to handle words and tags.  FYI, words are:")
             if separator in args.words:
                 start = args.words.index(separator) + 1
                 tagSearch = args.words[start : len(args.words)]
@@ -280,18 +272,7 @@ def diary():
             else:
                 tmp = tmp.split(".")[0]
                 entryTime = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
-            # entry1 = entry[1][0:10]
-            # print("  entry1 '%s'" % entry1)
-            # entryTime = datetime.datetime.strptime(entry1, "%Y-%m-%d")
-            # print("  entryTime '%s'" % entryTime)
-            # print(entryTime)
-            # print(type(entryTime))
-            # print("  since '%s'" % since)
-            # print(since)
-            # print(type(since))
-            # print("  entryTime exceeds since '%s'" % (entryTime > since))
             showBasedOnTime = (not since) or entryTime > since
-            # print("showBasedOnTime %s" % showBasedOnTime)
             show = (showAll or showBasedOnEntry or showBasedOnTag) and showBasedOnTime
             if args.debug:
                 print("  entrySearch:", entrySearch)

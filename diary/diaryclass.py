@@ -195,7 +195,6 @@ class Diary:
         names = []
         try:
             for n in self.cur.execute("SELECT tag FROM tags;").fetchall():
-                # Strip leading and trailing whitespaces
                 k = n[0].strip()
                 if len(k):
                     names.extend([k])
