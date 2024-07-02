@@ -1,8 +1,12 @@
 # diary
 
-'diary' is a python script to handle diary entries.
+'diary' is a python script to handle diary entries.  This file is a
+sort of sandbox for the author.  Perhaps some of this content will
+appear later in a vignette or whatever is the python equivalent of an
+R vignette.  Please do not rely on anything in this document actually
+working at this time, and please do not expect that any behaviour
+sketched here will continue to work.  It's a sandbox after all.
 
-Nothing works yet!  Here are some samples.
 
 # Sample Usage
 
