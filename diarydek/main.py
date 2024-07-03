@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from .diaryclass import Diary
+from .diarydekclass import Diarydek
 import argparse
 import sys
 from csv import reader
@@ -10,8 +10,8 @@ import json
 from os import path
 
 
-rcfile = "~/.diaryrc"  # can define next 2 items
-defaultDatabase = "~/diary.db"
+rcfile = "~/.diardekyrc"  # can define next 2 items
+defaultDatabase = "~/diarydek.db"
 separator = ":"
 try:
     f = open(path.expanduser(rcfile))
@@ -40,7 +40,7 @@ written in JSON format, as in the example below. So far, the only
 element that can be altered is the default database name.
 
     {
-        "database": "~/Dropbox/diary.db"
+        "database": "~/Dropbox/diarydek.db"
     }
 
 Another way to specify the database is by using a unix alias, e.g. the
@@ -150,7 +150,7 @@ def diary():
         print("  tags:  %s" % tags)
     if not args.database:
         args.database = defaultDatabase
-    diary = Diary(debug=args.debug, db=args.database)
+    diary = Diarydek(debug=args.debug, db=args.database)
 
     if args.renameTag:
         if args.words:

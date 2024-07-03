@@ -34,7 +34,7 @@ Several manual steps are required.
 2. Ensure that `README.md` has an entry for the version.
 3. Ensure that the version numbers in the present document are updated, so that
    cut/paste will work for local installations.
-4. Update the `self.appversion =` line in `diary/diaryclass.py` for the new version. Look
+4. Update the `self.appversion =` line in `diary/diarydekclass.py` for the new version. Look
    carefully at the nearby code, if changes have been made to the database.
 5. Remove old files from the `dist/` directory.
 6. Perform the steps listed under "Packaging" and "Installing package locally" below.
@@ -47,12 +47,12 @@ Testing before packaging
 
 ::
 
-    PYTHONPATH=/Users/kelley/git/diary python3 -m diary
+    PYTHONPATH=/Users/kelley/git/diarydek python3 -m diarydek
 
 Packaging
 ---------
 
-Each time the ``diary`` source is updated, do the following to test and package
+Each time the ``diarydek`` source is updated, do the following to test and package
 it:
 
 ::
@@ -70,7 +70,7 @@ To install a local test version, do e.g. (with the up-to-date version number, if
 
 ::
 
-    sudo -H pip3 install dist/diary-0.0.1.tar.gz --upgrade
+    sudo -H pip3 install dist/diarydek-0.0.1.tar.gz --upgrade
 
 
 Installing package on pypi.python
@@ -86,18 +86,18 @@ then do:
 
 
 **Reminder** After uploading, be sure to increment the version number (a) in
-line 4 of setup.py, (b) in the present file and (c) in diary/diaryclass.py where
+line 4 of setup.py, (b) in the present file and (c) in diarydek/diarydekclass.py where
 self.appversion is define. Then add a blank entry for this new version, in
 README.rst.
 
 
-Suggested aliases for diary
---------------------------
+Suggested aliases for diarydek
+-----------------------------
 
 The developer uses the following, so that ``n`` runs the packaged version and
 ``nn`` runs the new (source-code) version.
 
 ::
 
-    alias ,d='diary' # or, for debugging, 'PYTHONPATH=~/git/diary python3 -m diary'
+    alias ,d='diarydek' # or, for debugging, 'PYTHONPATH=~/git/diary python3 -m diarydek'
 

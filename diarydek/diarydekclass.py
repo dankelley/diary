@@ -7,8 +7,8 @@ import os.path
 authorId = "Dan Kelley"
 
 
-class Diary:
-    def __init__(self, db="~/Dropbox/diary.db", debug=0, quiet=False):
+class Diary_dek:
+    def __init__(self, db="~/Dropbox/diary_dek.db", debug=0, quiet=False):
         """
         A class used for the storing and searching diary notes.
         """
@@ -72,7 +72,7 @@ class Diary:
         sys.exit(level)
 
     def version(self):
-        return "diary version %d.%d.%d" % (
+        return "diary_dek version %d.%d.%d" % (
             self.appversion[0],
             self.appversion[1],
             self.appversion[2],
