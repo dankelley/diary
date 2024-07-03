@@ -1,11 +1,9 @@
 # diarydek
 
-'diarydek' is a python script to handle diary entries.  This file is a
-sort of sandbox for the author.  Perhaps some of this content will
-appear later in a vignette or whatever is the python equivalent of an
-R vignette.  Please do not rely on anything in this document actually
-working at this time, and please do not expect that any behaviour
-sketched here will continue to work.  It's a sandbox after all.
+'diarydek' is a python script to handle diary entries.  It is still in
+an Alpha stage of development, meaning that anything you see here
+might change in the future.  Heck, some of it may be wrong even as you
+read this!
 
 
 # Sample Usage
@@ -64,7 +62,7 @@ times of the entries are preserved in the new database.
 
     diarydek --tags
 
-# Developer's test code
+# Developer's notes
 
 During testing, the following proved helpful. Note that it starts by
 destroying the database!!
@@ -86,3 +84,53 @@ destroying the database!!
     ,d --tags
     ,d --writeCSV > ~/diary.csv
     ,d --database ~/new.db --readCSV ~/diary.csv
+
+
+# Developer notes
+
+
+The following builds locally, when run from the source directory.
+
+    python3 -m pip install . --break-system-packages
+
+If this works in testing, consider uploading to pypi.  Be sure to bump
+the version number first to avoid conflict with a version on pypi.  Do
+this in two steps:
+
+1. Edit the `pyproject.toml` file, altering the line defining
+   `version`.
+
+2. Edit the `src/diarydek/diarydek.py` file, altering
+   the definition of `self.appversion`.
+
+With this done, it is possible to upload to pypi, which is done with
+the following.  (The first step just ensures that you don't try to
+upload any old sources that you might have built up previously with
+twine.)
+
+    rm dist/*
+    python3 -m twine upload dist/*
+
+Once this is done, you can install the pypi version using the
+following.  If it works, then you can have some assurance that users
+can install it (using the second step).
+
+    pip uninstall diarydek --break-system-packages
+    pip install diarydek --break-system-packages
+
+# Suggested aliases
+
+Although you can use a single diary for all your work, it can
+sometimes help to have multiple databases, e.g. for privacy.  I do
+things like the following.
+
+    alias ',dp'='diarydek --database=~/Documents/diary/personal.db'
+    alias ',dw'='diarydek --database=~/Documents/diary/work.db'
+
+
+References
+----------
+
+1. https://packaging.python.org/tutorials/packaging-projects/ provides
+   information on packaging.
+
