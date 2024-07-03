@@ -1,6 +1,42 @@
 Developer notes
 ===============
 
+New instructions as of July 2024
+--------------------------------
+
+Use following alias for local work
+::
+
+    alias ",dd"="PYTHONPATH=/Users/kelley/git/diarydek python3 -m diarydek"
+
+When things seem okay, do
+::
+
+    python3 -m build
+
+to build the sources in a form that is suitable for upload to pypi.
+these are stored in the `dist/` directory.  Manually remove any old
+files that predate the ones you just made.  If you are sure things are
+okay, upload to pypi by using
+::
+
+    twine upload dist/*
+
+If this complains about it already being there, that likely means that
+you forgot to bump the version number.  So, do that in both the
+`pyproject.toml` file, and in `diarydek/diarydekclass.py`, where it
+appears in the definition of `self.appversion`, which is a tuple.
+
+Once this is done, you should pop over to pypi.org and remove the old
+version.  Then do
+::
+    pip uninstall diarydek --break-system-packages
+    pip install diarydek --break-system-packages
+
+And then?  Well, I don't know how to make it work.  It does not seem
+to install the main program or, if it does, it's not in my PATH.
+Frustrating...
+
 References
 ----------
 

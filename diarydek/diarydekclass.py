@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+# !/usr/bin/python3
 
 import sys
 import sqlite3 as sqlite
@@ -35,7 +35,7 @@ class Diarydek:
         self.cur = con.cursor()
         self.authorId = authorId
         # Note that db schema changes yield first or second digit increment
-        self.appversion = [0, 1, 0]
+        self.appversion = [0, 0, 2]
         self.dbversion = self.appversion
         if mustInitialize:
             self.initialize()
