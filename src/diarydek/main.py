@@ -10,7 +10,7 @@ import json
 from os import path
 
 
-def diarydek():
+def mainer():
     rcfile = "~/.diarydekrc"  # can define next 2 items
     defaultDatabase = "~/diarydek.db"
     separator = ":"

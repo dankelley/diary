@@ -23,4 +23,4 @@ Homepage = "https://github.com/dankelley/diarydek"
 Issues = "https://github.com/dankelley/diarydek/issues"
 
 [project.scripts]
-diarydek = "diarydek:diarydek"
+diarydek = "diarydek:main"

@@ -4,23 +4,31 @@ Developer notes
 New instructions as of July 2024
 --------------------------------
 
-Use following alias for local work
-::
 
+I have used the following alias for local work (or something similar).
+The idea is to skip the funky details of packaging.
+
+::
     alias ",dd"="PYTHONPATH=/Users/kelley/git/diarydek python3 -m diarydek"
 
-When things seem okay, do
-::
+The following builds locally, so I'm focussing on that for now.
 
+::
+    python3 -m pip install . --break-system-packages
+
+When things seem okay, do as follows.
+
+::
     python3 -m build
 
-to build the sources in a form that is suitable for upload to pypi.
+This builds the sources in a form that is suitable for upload to pypi.
 these are stored in the `dist/` directory.  Manually remove any old
 files that predate the ones you just made.  If you are sure things are
-okay, upload to pypi by using
-::
+okay, upload to pypi by using the following (either seems to work)
 
-    twine upload dist/*
+::
+    python3 -m twine upload dist/*
+    # twine upload dist/*
 
 If this complains about it already being there, that likely means that
 you forgot to bump the version number.  So, do that in both the
