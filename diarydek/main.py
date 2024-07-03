@@ -34,8 +34,8 @@ overallHelp = """
 
 # Customization
 
-Some features of how diary works can be customized with a file in the
-user's top-level directory, called `.diaryrc`. This file must be
+Some features of how diarydek works can be customized with a file in the
+user's top-level directory, called `.diarydekrc`. This file must be
 written in JSON format, as in the example below. So far, the only
 element that can be altered is the default database name.
 
@@ -45,10 +45,10 @@ element that can be altered is the default database name.
 
 Another way to specify the database is by using a unix alias, e.g. the
 author uses the following to isolate some diary items to a personal
-database, by typing `,dp` instead of `diary` in the command-line
+database, by typing `,dp` instead of `diarydek` in the command-line
 interface.
 
-    alias ',dp'='diary --database=~/Documents/diary/personal.db'
+    alias ',dp'='diarydek --database=~/Documents/diary/personal.db'
 
 # Advanced usage
 
@@ -57,10 +57,10 @@ interface.
 The following creates a new database that contains the contents of two
 other databases.
 
-    diary --database ~/a.db --export > a.csv
-    diary --database ~/b.db --export > b.csv
-    diary --database ~/ab.db import < a.csv
-    diary --database ~/ab.db import < b.csv
+    diarydek --database ~/a.db --export > a.csv
+    diarydek --database ~/b.db --export > b.csv
+    diarydek --database ~/ab.db import < a.csv
+    diarydek --database ~/ab.db import < b.csv
 
 """
 
@@ -86,7 +86,8 @@ def diary():
         metavar="filename",
     )
     parser.add_argument(
-        "--version", action="store_true", help="Show application version number."
+        "--version", action="store_true",
+        help="Show application version number."
     )
     parser.add_argument(
         "--time",

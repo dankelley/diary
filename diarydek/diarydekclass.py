@@ -7,8 +7,8 @@ import os.path
 authorId = "Dan Kelley"
 
 
-class Diary_dek:
-    def __init__(self, db="~/Dropbox/diary_dek.db", debug=0, quiet=False):
+class Diarydek:
+    def __init__(self, db="~/Dropbox/diarydek.db", debug=0, quiet=False):
         """
         A class used for the storing and searching diary notes.
         """
@@ -40,7 +40,7 @@ class Diary_dek:
         if mustInitialize:
             self.initialize()
         try:
-            self.dbversion = self.cur.execute("SELECT * FROM version;").fetchone()
+            self.dbversion = self.cur.execute("""SELECT * FROM version;""").fetchone()
         except Exception:
             self.warning("cannot get version number in database")
             self.dbversion = [0, 1, 0]
@@ -72,7 +72,7 @@ class Diary_dek:
         sys.exit(level)
 
     def version(self):
-        return "diary_dek version %d.%d.%d" % (
+        return "diarydek version %d.%d.%d" % (
             self.appversion[0],
             self.appversion[1],
             self.appversion[2],
@@ -139,19 +139,33 @@ class Diary_dek:
 
     def initialize(self):
         """Initialize the database"""
-        self.cur.execute("CREATE TABLE version(major, minor, subminor);")
         self.cur.execute(
-            "INSERT INTO version(major, minor, subminor) VALUES (?,?,?);",
+                """CREATE TABLE version(major, minor, subminor);
+                """)
+        self.cur.execute(
+            """INSERT INTO version(major, minor, subminor)
+            VALUES (?,?,?);""",
             (self.appversion[0], self.appversion[1], self.appversion[2]),
         )
         self.cur.execute(
-            "CREATE TABLE tags(tagId integer primary key autoincrement, tag);"
+            """CREATE TABLE tags(
+                tagId integer primary key autoincrement,
+                tag);
+            """
         )
         self.cur.execute(
-            "CREATE TABLE entries(entryId integer primary key autoincrement, time, entry);"
+            """CREATE TABLE entries(
+                entryId integer primary key autoincrement,
+                time,
+                entry);
+            """
         )
         self.cur.execute(
-            "CREATE TABLE entry_tags(entryTagId integer primary key autoincrement, entryId, tagId);"
+            """
+            CREATE TABLE entry_tags(
+                entryTagId integer primary key autoincrement,
+                entryId, tagId);
+            """
         )
         self.con.commit()
 
@@ -173,7 +187,9 @@ class Diary_dek:
 
     def get_table(self, tablename):
         if tablename == "entries":
-            res = self.cur.execute("SELECT * from %s ORDER BY time;" % tablename).fetchall()
+            res = self.cur.execute(
+                "SELECT * from %s ORDER BY time;" % tablename
+            ).fetchall()
         else:
             res = self.cur.execute("SELECT * from %s;" % tablename).fetchall()
         self.con.commit()

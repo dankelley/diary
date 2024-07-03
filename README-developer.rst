@@ -99,5 +99,5 @@ The developer uses the following, so that ``n`` runs the packaged version and
 
 ::
 
-    alias ,d='diarydek' # or, for debugging, 'PYTHONPATH=~/git/diary python3 -m diarydek'
+    alias ,d='diarydek' # or, for debugging, 'PYTHONPATH=~/git/diarydek python3 -m diarydek'
 
