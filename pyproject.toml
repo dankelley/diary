@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "diarydek"
-version = "0.0.2"
+version = "0.0.14"
 authors = [
-  { name="Dan Kelley", email="kelley@dal.ca" }
+  { name = "Dan Kelley", email = "kelley@dal.ca" }
 ]
 description = "A diary tool."
 readme = "README.md"
@@ -15,9 +15,12 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
 ]
 
 [project.urls]
 Homepage = "https://github.com/dankelley/diarydek"
 Issues = "https://github.com/dankelley/diarydek/issues"
 
+[project.scripts]
+diarydek = "diarydek:diarydek"

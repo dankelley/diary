@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from .diarydekclass import Diarydek
+from .diarydek import Diarydek
 import argparse
 import sys
 from csv import reader
@@ -10,28 +10,28 @@ import json
 from os import path
 
 
-rcfile = "~/.diardekyrc"  # can define next 2 items
-defaultDatabase = "~/diarydek.db"
-separator = ":"
-try:
-    f = open(path.expanduser(rcfile))
-    rc = json.load(f)
+def diarydek():
+    rcfile = "~/.diarydekrc"  # can define next 2 items
+    defaultDatabase = "~/diarydek.db"
+    separator = ":"
     try:
-        tmp = rc["database"]
-        defaultDatabase = tmp
-    except KeyError:
+        f = open(path.expanduser(rcfile))
+        rc = json.load(f)
+        try:
+            tmp = rc["database"]
+            defaultDatabase = tmp
+        except KeyError:
+            pass
+        try:
+            tmp = rc["separator"]
+            separator = tmp
+        except KeyError:
+            pass
+        # defaultDatabase
+    except IOError:
         pass
-    try:
-        tmp = rc["separator"]
-        separator = tmp
-    except KeyError:
-        pass
-    # defaultDatabase
-except IOError:
-    pass
 
-overallHelp = """
-
+    overallHelp = """
 # Customization
 
 Some features of how diarydek works can be customized with a file in the
@@ -61,15 +61,11 @@ other databases.
     diarydek --database ~/b.db --export > b.csv
     diarydek --database ~/ab.db import < a.csv
     diarydek --database ~/ab.db import < b.csv
-
 """
-
-
-def diary():
     time = datetime.datetime.now()  # can be over-written by --time
     parser = argparse.ArgumentParser(
         prog="diary",
-        description="Diary: a commandline tool for adding entries to a diary database.",
+        description="diarydek: a commandline tool for adding entries to a diary database.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent(overallHelp),
     )
@@ -136,8 +132,8 @@ def diary():
     if args.words:
         if separator in args.words:
             start = args.words.index(separator) + 1
-            tags = args.words[start : len(args.words)]
-            entry = " ".join(map(str, args.words[0 : start - 1]))
+            tags = args.words[start:len(args.words)]
+            entry = " ".join(map(str, args.words[0:start - 1]))
         else:
             entry = " ".join(map(str, args.words))
             tags = []
@@ -244,8 +240,8 @@ def diary():
         if args.words:
             if separator in args.words:
                 start = args.words.index(separator) + 1
-                tagSearch = args.words[start : len(args.words)]
-                entrySearch = " ".join(map(str, args.words[0 : start - 1]))
+                tagSearch = args.words[start:len(args.words)]
+                entrySearch = " ".join(map(str, args.words[0:start - 1]))
             else:
                 entrySearch = " ".join(map(str, args.words))
             if args.debug:

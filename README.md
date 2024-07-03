@@ -1,4 +1,4 @@
-# diary
+# diarydek
 
 'diarydek' is a python script to handle diary entries.  This file is a
 sort of sandbox for the author.  Perhaps some of this content will

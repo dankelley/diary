@@ -1,5 +1,6 @@
-# !/usr/bin/python3
+#!/usr/bin/python3
 
+from __future__ import print_function
 import sys
 import sqlite3 as sqlite
 import os.path
@@ -34,8 +35,8 @@ class Diarydek:
         self.con = con
         self.cur = con.cursor()
         self.authorId = authorId
-        # Note that db schema changes yield first or second digit increment
-        self.appversion = [0, 0, 2]
+        # DEVELOPER: next line must match version in toml file
+        self.appversion = [0, 0, 14]
         self.dbversion = self.appversion
         if mustInitialize:
             self.initialize()
@@ -139,12 +140,10 @@ class Diarydek:
 
     def initialize(self):
         """Initialize the database"""
+        self.cur.execute("CREATE TABLE version(major, minor, subminor);")
         self.cur.execute(
-                """CREATE TABLE version(major, minor, subminor);
-                """)
-        self.cur.execute(
-            """INSERT INTO version(major, minor, subminor)
-            VALUES (?,?,?);""",
+            """INSERT INTO version(major, minor, subminor) VALUES (?,?,?);
+            """,
             (self.appversion[0], self.appversion[1], self.appversion[2]),
         )
         self.cur.execute(

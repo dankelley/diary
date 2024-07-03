@@ -2,7 +2,7 @@ import unittest
 import tempfile
 import logging
 import datetime
-from diarydek.diarydekclass import Diarydek
+from diarydek.diarydek import Diarydek
 import os
 import sys
 

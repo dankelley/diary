@@ -24,7 +24,7 @@ okay, upload to pypi by using
 
 If this complains about it already being there, that likely means that
 you forgot to bump the version number.  So, do that in both the
-`pyproject.toml` file, and in `diarydek/diarydekclass.py`, where it
+`pyproject.toml` file, and in `diarydek/diarydek.py`, where it
 appears in the definition of `self.appversion`, which is a tuple.
 
 Once this is done, you should pop over to pypi.org and remove the old
@@ -70,7 +70,7 @@ Several manual steps are required.
 2. Ensure that `README.md` has an entry for the version.
 3. Ensure that the version numbers in the present document are updated, so that
    cut/paste will work for local installations.
-4. Update the `self.appversion =` line in `diary/diarydekclass.py` for the new version. Look
+4. Update the `self.appversion =` line in `diary/diarydek.py` for the new version. Look
    carefully at the nearby code, if changes have been made to the database.
 5. Remove old files from the `dist/` directory.
 6. Perform the steps listed under "Packaging" and "Installing package locally" below.
@@ -122,7 +122,7 @@ then do:
 
 
 **Reminder** After uploading, be sure to increment the version number (a) in
-line 4 of setup.py, (b) in the present file and (c) in diarydek/diarydekclass.py where
+line 4 of setup.py, (b) in the present file and (c) in diarydek/diarydek.py where
 self.appversion is define. Then add a blank entry for this new version, in
 README.rst.
 
