@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "diary_kelley"
+version = "0.0.1"
+authors = [
+  { name="Dan Kelley", email="kelley@dal.ca" }
+]
+description = "A diary tool."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/dankelley/diary"
+Issues = "https://github.com/dankelley/diary/issues"
+

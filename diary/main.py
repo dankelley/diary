@@ -9,6 +9,7 @@ import datetime
 import json
 from os import path
 
+
 rcfile = "~/.diaryrc"  # can define next 2 items
 defaultDatabase = "~/diary.db"
 separator = ":"
@@ -29,7 +30,7 @@ try:
 except IOError:
     pass
 
-overallHelp = '''
+overallHelp = """
 
 # Customization
 
@@ -61,10 +62,11 @@ other databases.
     diary --database ~/ab.db import < a.csv
     diary --database ~/ab.db import < b.csv
 
-'''
+"""
 
 
 def diary():
+    time = datetime.datetime.now()  # can be over-written by --time
     parser = argparse.ArgumentParser(
         prog="diary",
         description="Diary: a commandline tool for adding entries to a diary database.",
@@ -87,7 +89,14 @@ def diary():
         "--version", action="store_true", help="Show application version number."
     )
     parser.add_argument(
-        "--tags", action="store_true", help="Show tags in database, with counts."
+        "--time",
+        type=str,
+        default=None,
+        help="time of item (defaults to present time if not given).",
+        metavar="\"yyyy-mm-dd\" or \"yyyy-mm-ddThh:mm:ss\"",
+    )
+    parser.add_argument(
+        "--showTags", action="store_true", help="Show tags in database, with counts."
     )
     parser.add_argument("--list", action="store_true", help="Print entries")
     parser.add_argument(
@@ -117,8 +126,10 @@ def diary():
         metavar=("old", "new"),
     )
     parser.add_argument(
-        "words", type=str, nargs="*",
-        help="Diary entry, in the form of words that are optionally followed by tags, following a ':' character."
+        "words",
+        type=str,
+        nargs="*",
+        help="Diary entry, in the form of words that are optionally followed by tags, following a ':' character.",
     )
     args = parser.parse_args()
     if args.words:
@@ -155,13 +166,22 @@ def diary():
         (major, minor, subminor) = diary.appversion
         print("diary version %d.%d.%d" % (major, minor, subminor))
         sys.exit(0)
-
-    if args.tags:
+    if args.showTags:
         print("Tags in database, with counts:")
         for row in diary.get_tags_with_counts():
             print(" %10s: %d" % (row[0], row[1]))
-        sys.exit(0)  # handle --tags
-
+        sys.exit(0)  # handle --showTags
+    if args.time:
+        tmp = args.time
+        if args.debug:
+            print("FIXME: handle --time %s" % args.time[0])
+        if len(tmp) == 10:
+            time = datetime.datetime.strptime(tmp, "%Y-%m-%d")
+        elif len(tmp) == 19:
+            time = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
+        else:
+            diary.error("must give time as \"yyyy-mm-dd\" or \"yyyy-mm-dd HH:MM:SS\"")
+            sys.exit(1)
     since = None
     if args.since:
         tmp = args.since[0]
@@ -294,7 +314,6 @@ def diary():
 
     # Database insertion
     elif args.words:
-        time = datetime.datetime.now()
         diary.add_entry(time, entry, tags)
     else:
         print("Try -h to learn how to use this")
