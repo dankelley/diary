@@ -108,15 +108,16 @@ the following.  (The first step just ensures that you don't try to
 upload any old sources that you might have built up previously with
 twine.)
 
-    rm dist/*
-    python3 -m twine upload dist/*
+    rm dist/*                      # remove any existing files
+    python3 -m build               # build, installing 2 files in dist
+    python3 -m twine upload dist/* # upload to pypi
 
 Once this is done, you can install the pypi version using the
 following.  If it works, then you can have some assurance that users
 can install it (using the second step).
 
-    pip uninstall diarydek --break-system-packages
-    pip install diarydek --break-system-packages
+    pip uninstall diarydek --break-system-packages # remove any existing version
+    pip install diarydek --break-system-packages   # install new, from pypi
 
 # Suggested aliases
 

@@ -85,15 +85,14 @@ author uses the following to isolate work and personal diaries.
         metavar="filename",
     )
     parser.add_argument(
-        "--version", action="store_true",
-        help="Show application version number."
+        "--version", action="store_true", help="Show application version number."
     )
     parser.add_argument(
         "--time",
         type=str,
         default=None,
         help="time of item (defaults to present time if not given).",
-        metavar="\"yyyy-mm-dd\" or \"yyyy-mm-ddThh:mm:ss\"",
+        metavar='"yyyy-mm-dd" or "yyyy-mm-ddThh:mm:ss"',
     )
     parser.add_argument(
         "--showTags", action="store_true", help="Show tags in database, with counts."
@@ -135,8 +134,8 @@ author uses the following to isolate work and personal diaries.
     if args.words:
         if separator in args.words:
             start = args.words.index(separator) + 1
-            tags = args.words[start:len(args.words)]
-            entry = " ".join(map(str, args.words[0:start - 1]))
+            tags = args.words[start : len(args.words)]
+            entry = " ".join(map(str, args.words[0 : start - 1]))
         else:
             entry = " ".join(map(str, args.words))
             tags = []
@@ -180,7 +179,7 @@ author uses the following to isolate work and personal diaries.
         elif len(tmp) == 19:
             time = datetime.datetime.strptime(tmp, "%Y-%m-%d %H:%M:%S")
         else:
-            diary.error("must give time as \"yyyy-mm-dd\" or \"yyyy-mm-dd HH:MM:SS\"")
+            diary.error('must give time as "yyyy-mm-dd" or "yyyy-mm-dd HH:MM:SS"')
             sys.exit(1)
     since = None
     if args.since:
@@ -243,8 +242,8 @@ author uses the following to isolate work and personal diaries.
         if args.words:
             if separator in args.words:
                 start = args.words.index(separator) + 1
-                tagSearch = args.words[start:len(args.words)]
-                entrySearch = " ".join(map(str, args.words[0:start - 1]))
+                tagSearch = args.words[start : len(args.words)]
+                entrySearch = " ".join(map(str, args.words[0 : start - 1]))
             else:
                 entrySearch = " ".join(map(str, args.words))
             if args.debug:
@@ -304,7 +303,7 @@ author uses the following to isolate work and personal diaries.
                 print("  showBasedOnTag: %d" % showBasedOnTag)
                 print("  show: %d" % show)
             if show:
-                print("%s %s" % (entry[1], entry[2]), end="")
+                print("%18s %s" % (entry[1], entry[2]), end="")
                 if tags:
                     print(" : ", end="")
                     for tag in tags:
