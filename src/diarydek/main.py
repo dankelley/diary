@@ -303,7 +303,7 @@ author uses the following to isolate work and personal diaries.
                 print("  showBasedOnTag: %d" % showBasedOnTag)
                 print("  show: %d" % show)
             if show:
-                print("%18s %s" % (entry[1], entry[2]), end="")
+                print("%.19s %s" % (entry[1], entry[2]), end="")
                 if tags:
                     print(" : ", end="")
                     for tag in tags:
