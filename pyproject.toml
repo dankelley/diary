@@ -4,7 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "diarydek"
-version = "0.0.14"
+# make sure next line matches appversion in src/diarydek/diarydek.py
+version = "0.0.15"
 authors = [
   { name = "Dan Kelley", email = "kelley@dal.ca" }
 ]

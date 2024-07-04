@@ -32,7 +32,21 @@ def mainer():
         pass
 
     overallHelp = """
+# Advanced Topics
+
+## Merging databases
+
+The following creates a new database that contains the contents of two
+other databases.
+
+    diarydek --database ~/a.db --export > a.csv
+    diarydek --database ~/b.db --export > b.csv
+    diarydek --database ~/ab.db import < a.csv
+    diarydek --database ~/ab.db import < b.csv
+
 # Customization
+
+## Start-up file
 
 Some features of how diarydek works can be customized with a file in the
 user's top-level directory, called `.diarydekrc`. This file must be
@@ -43,24 +57,13 @@ element that can be altered is the default database name.
         "database": "~/Dropbox/diarydek.db"
     }
 
+# Suggested aliases
+
 Another way to specify the database is by using a unix alias, e.g. the
-author uses the following to isolate some diary items to a personal
-database, by typing `,dp` instead of `diarydek` in the command-line
-interface.
+author uses the following to isolate work and personal diaries.
 
+    alias ',dw'='diarydek --database=~/Documents/diary/work.db'
     alias ',dp'='diarydek --database=~/Documents/diary/personal.db'
-
-# Advanced usage
-
-## Merging two databases
-
-The following creates a new database that contains the contents of two
-other databases.
-
-    diarydek --database ~/a.db --export > a.csv
-    diarydek --database ~/b.db --export > b.csv
-    diarydek --database ~/ab.db import < a.csv
-    diarydek --database ~/ab.db import < b.csv
 """
     time = datetime.datetime.now()  # can be over-written by --time
     parser = argparse.ArgumentParser(
