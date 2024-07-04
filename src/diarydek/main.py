@@ -39,10 +39,10 @@ def mainer():
 The following creates a new database that contains the contents of two
 other databases.
 
-    diarydek --database ~/a.db --export > a.csv
-    diarydek --database ~/b.db --export > b.csv
-    diarydek --database ~/ab.db import < a.csv
-    diarydek --database ~/ab.db import < b.csv
+    diarydek --database ~/a.db --writeCSV > a.csv
+    diarydek --database ~/b.db --writeCSV > b.csv
+    diarydek --database ~/new.db --readCSV a.csv
+    diarydek --database ~/new.db --readCSV b.csv
 
 # Customization
 
