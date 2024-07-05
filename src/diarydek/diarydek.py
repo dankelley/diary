@@ -103,6 +103,8 @@ class Diarydek:
     def add_entry(self, time, entry, tags):
         self.fyi("add_entry...")
         self.fyi("  entry: %s" % entry)
+        if not len(entry):
+            self.error("Must supply an entry before the ':' character.")
         self.fyi("  tags:  %s" % tags)
         self.cur.execute("INSERT INTO entries(time,entry) VALUES(?,?);", (time, entry))
         entryId = self.cur.lastrowid
