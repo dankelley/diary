@@ -14,50 +14,33 @@ def mainer():
     rcfile = "~/.diarydekrc"  # can define next 2 items
     defaultDatabase = "~/diarydek.db"
     separator = ":"
-    try:
-        f = open(path.expanduser(rcfile))
-        rc = json.load(f)
-        try:
-            tmp = rc["database"]
-            defaultDatabase = tmp
-        except KeyError:
-            pass
-        try:
-            tmp = rc["separator"]
-            separator = tmp
-        except KeyError:
-            pass
-        # defaultDatabase
-    except IOError:
-        pass
-
+    # try:
+    #     f = open(path.expanduser(rcfile))
+    #     rc = json.load(f)
+    #     try:
+    #         tmp = rc["database"]
+    #         defaultDatabase = tmp
+    #     except KeyError:
+    #         pass
+    #     try:
+    #         tmp = rc["separator"]
+    #         separator = tmp
+    #     except KeyError:
+    #         pass
+    #     # defaultDatabase
+    # except IOError:
+    #     pass
     overallHelp = """
-# Advanced Topics
+# Hints
 
-## Merging databases
+## Merging Databases
 
-The following creates a new database that contains the contents of two
-other databases.
+The following appends the contents of the database B to database A.
 
-    diarydek --database ~/a.db --writeCSV > a.csv
-    diarydek --database ~/b.db --writeCSV > b.csv
-    diarydek --database ~/new.db --readCSV a.csv
-    diarydek --database ~/new.db --readCSV b.csv
+    diarydek --database ~/B.db --writeCSV > B.csv
+    diarydek --database ~/A.db --readCSV B.csv
 
-# Customization
-
-## Start-up file
-
-Some features of how diarydek works can be customized with a file in the
-user's top-level directory, called `.diarydekrc`. This file must be
-written in JSON format, as in the example below. So far, the only
-element that can be altered is the default database name.
-
-    {
-        "database": "~/Dropbox/diarydek.db"
-    }
-
-# Suggested aliases
+# Suggested Aliases
 
 Another way to specify the database is by using a unix alias, e.g. the
 author uses the following to isolate work and personal diaries.
@@ -65,6 +48,16 @@ author uses the following to isolate work and personal diaries.
     alias ',dw'='diarydek --database=~/Documents/diary/work.db'
     alias ',dp'='diarydek --database=~/Documents/diary/personal.db'
 """
+    # ## Start-up file
+    #
+    # Some features of how diarydek works can be customized with a file in the
+    # user's top-level directory, called `.diarydekrc`. This file must be
+    # written in JSON format, as in the example below. So far, the only
+    # element that can be altered is the default database name.
+    #
+    #     {
+    #         "database": "~/Dropbox/diarydek.db"
+    #     }
     time = datetime.datetime.now()  # can be over-written by --time
     parser = argparse.ArgumentParser(
         prog="diary",
@@ -75,66 +68,70 @@ author uses the following to isolate work and personal diaries.
     parser.add_argument(
         "--debug",
         action="store_true",
-        help="Turn on tracer information.",
+        help="turn on tracer information",
     )
     parser.add_argument(
         "--database",
         type=str,
         default=None,
-        help="database location (defaults to %s)" % defaultDatabase,
+        help="set database location (defaults to %s)" % defaultDatabase,
         metavar="filename",
     )
     parser.add_argument(
-        "--version", action="store_true", help="Show application version number."
+        "--version", action="store_true", help="show application version number"
     )
     parser.add_argument(
         "--time",
         type=str,
         default=None,
-        help="time of item (defaults to present time if not given).",
-        metavar='"yyyy-mm-dd" or "yyyy-mm-ddThh:mm:ss"',
+        help='set entry time as yyyy-mm-yy or "yyyy-mm-yy HH:MM:SS" (defaults to present time)',
+        metavar="yyyy-mm-dd",
     )
     parser.add_argument(
-        "--showTags", action="store_true", help="Show tags in database, with counts."
+        "--showTags", action="store_true", help="show tags in database, with counts"
     )
     parser.add_argument(
-        "--showID", action="store_true", help="Show <ID> in --list output."
+        "--showID", action="store_true", help="show <ID> in --list output"
     )
     parser.add_argument(
-        "--delete", type=int, default=None, help="Delete entry with given ID.", metavar="ID",
+        "--delete",
+        type=int,
+        default=None,
+        help="delete entry with given ID",
+        metavar="ID",
     )
-    parser.add_argument("--list", action="store_true", help="Print entries")
+    parser.add_argument("--list", action="store_true", help="print entries")
     parser.add_argument(
         "--since",
         type=str,
         nargs=1,
-        help="Restrict --list to a recent time interval, as yyyy-mm-dd or 'yyyy-mm-dd HH:MM:SS'",
+        help='restrict --list to a recent time interval, as yyyy-mm-dd or "yyyy-mm-dd HH:MM:SS"',
         metavar="yyyy-mm-dd",
     )
     parser.add_argument(
         "--writeCSV",
         action="store_true",
-        help="Write entries to a CSV format that can be read with --readCSV.",
+        help="write entries to stdout, in CSV format handled by --readCSV",
     )
     parser.add_argument(
         "--readCSV",
         type=str,
         default=None,
-        help="Read CSV information into database, reversing --writeCSV action.",
+        help="read CSV information into database, reversing --writeCSV action",
         metavar="file.csv",
     )
     parser.add_argument(
         "--renameTag",
         type=str,
         nargs=2,
-        help="Rename a tag.",
+        help="rename a tag",
         metavar=("old", "new"),
     )
     parser.add_argument(
         "words",
         type=str,
         nargs="*",
-        help="Diary entry, in the form of words that are optionally followed by tags, following a ':' character.",
+        help="diary entry, optionally followed by `:` and then tags",
     )
     args = parser.parse_args()
     if args.words:
