@@ -25,14 +25,6 @@ read this!
 
     diarydek I ate a salad for lunch. : food healthy
 
-## Export all entries in CSV format
-
-    diarydek --export > backup.csv
-
-## Import a previous export
-
-    diarydek --import < backup.csv
-
 ## See all entries
 
     diarydek --list
@@ -49,7 +41,11 @@ read this!
 
     diarydek --renameTag oldName newName
 
-## Exporting to csv (and importing back)
+## Find tag usage
+
+    diarydek --showTags
+
+## Combining databases.
 
 Export database to a csv file, then reread it into a new database.
 This could be useful in transporting files. Note that the original
@@ -58,9 +54,6 @@ times of the entries are preserved in the new database.
     diarydek --writeCSV > ~/diary.csv
     diarydek --database ~/new.db --readCSV ~/diary.csv
 
-## Find tag usage
-
-    diarydek --showTags
 
 # Developer's Notes
 
