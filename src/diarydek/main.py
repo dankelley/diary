@@ -247,7 +247,7 @@ author uses the following to isolate work and personal diaries.
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-            if tagSearch in tags:
+            if tagSearch in tags or len(tagSearch) == 0:
                 print('"%s","%s"' % (entry[1], entry[2]), end="")
                 if tags:
                     print(',"', end="")
