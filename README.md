@@ -47,7 +47,7 @@ read this!
 
 ## Rename a tag.
 
-    diarydek --rename-tag oldName newName
+    diarydek --renameTag oldName newName
 
 ## Exporting to csv (and importing back)
 
@@ -60,38 +60,9 @@ times of the entries are preserved in the new database.
 
 ## Find tag usage
 
-    diarydek --tags
+    diarydek --showTags
 
-# Developer's notes
-
-During testing, the following proved helpful. Note that it starts by
-destroying the database!!
-
-    # build and install local version (not touching pypi, no need to
-    # bump version number)
-    python3 -m pip install . --break-system-packages
-    # below are from VERY early stages, and should be deleted
-    alias ,a='\rm ~/Dropbox/diarydek.db'
-    # rapid testing: do next if in diary directory
-    #alias ,d='PYTHONPATH=/Users/kelley/git/diarydek python3 -m diarydek'
-    # after-installation testing
-    alias ,d='diarydek'
-    alias ,c='echo .dump|sqlite3 ~/Dropbox/diarydek.db'
-    ,a # clean database
-    ,d tweet or caw : bird sound
-    ,d meow : cat sound animal
-    ,d dog with no categories
-    ,c
-    ,d --list
-    ,d --list caw
-    ,d --list : sound
-    ,d --tags
-    ,d --writeCSV > ~/diary.csv
-    ,d --database ~/new.db --readCSV ~/diary.csv
-
-
-# Developer notes
-
+# Developer's Notes
 
 The following builds locally, when run from the source directory.
 
