@@ -36,7 +36,7 @@ class Diarydek:
         self.cur = con.cursor()
         self.authorId = authorId
         # DEVELOPER: next line must match version in toml file
-        self.appversion = [0, 0, 23]
+        self.appversion = [0, 0, 24]
         self.dbversion = self.appversion
         if mustInitialize:
             self.initialize()
