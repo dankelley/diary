@@ -97,6 +97,12 @@ author uses the following to isolate work and personal diaries.
     parser.add_argument(
         "--showTags", action="store_true", help="Show tags in database, with counts."
     )
+    parser.add_argument(
+        "--showID", action="store_true", help="Show <ID> in --list output."
+    )
+    parser.add_argument(
+        "--delete", type=int, default=None, help="Delete entry with given ID.", metavar="ID",
+    )
     parser.add_argument("--list", action="store_true", help="Print entries")
     parser.add_argument(
         "--since",
@@ -234,6 +240,12 @@ author uses the following to isolate work and personal diaries.
             print("")
         sys.exit(0)  # handle --writeCSV
 
+    if args.delete:
+        if args.debug:
+            print("handling --delete with ID=%d" % args.delete)
+        diary.delete_by_id(args.delete)
+        sys.exit(0)  # handle --delete
+
     if args.list:
         if args.debug:
             print("handling --list with --since=%s" % since)
@@ -303,6 +315,8 @@ author uses the following to isolate work and personal diaries.
                 print("  showBasedOnTag: %d" % showBasedOnTag)
                 print("  show: %d" % show)
             if show:
+                if args.showID:
+                    print("<%d> " % (entry[0],), end="")
                 print("%.19s %s" % (entry[1], entry[2]), end="")
                 if tags:
                     print(" : ", end="")

@@ -67,6 +67,10 @@ times of the entries are preserved in the new database.
 During testing, the following proved helpful. Note that it starts by
 destroying the database!!
 
+    # build and install local version (not touching pypi, no need to
+    # bump version number)
+    python3 -m pip install . --break-system-packages
+    # below are from VERY early stages, and should be deleted
     alias ,a='\rm ~/Dropbox/diarydek.db'
     # rapid testing: do next if in diary directory
     #alias ,d='PYTHONPATH=/Users/kelley/git/diarydek python3 -m diarydek'

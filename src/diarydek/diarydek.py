@@ -79,6 +79,16 @@ class Diarydek:
             self.appversion[2],
         )
 
+    def delete_by_id(self, id):
+        self.fyi("delete_by_id with id=%d" % (id,))
+        IDs = [entry[0] for entry in self.get_table("entries")]
+        if id not in IDs:
+            self.error("there is no entry with ID=%d" % id)
+        q = "DELETE FROM entries WHERE entryId=%d;" % id
+        self.fyi(q)
+        self.cur.execute(q)
+        self.con.commit()
+
     def rename_tag(self, old, new):
         self.fyi("rename_tag with old='%s' and new='%s'" % (old, new))
         tagNames = [tag[1] for tag in self.get_table("tags")]
