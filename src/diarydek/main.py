@@ -213,13 +213,33 @@ author uses the following to isolate work and personal diaries.
         tags = diary.get_table("tags")
         entries = diary.get_table("entries")
         entry_tags = diary.get_table("entry_tags")
-        if args.debug:
-            print("tags: ", end="")
-            print(tags)
-            print("entries: ", end="")
-            print(entries)
-            print("entry_tags: ", end="")
-            print(entry_tags)
+        # if args.debug:
+        #     print("tags: ", end="")
+        #     print(tags)
+        #     print("entries: ", end="")
+        #     print(entries)
+        #     print("entry_tags: ", end="")
+        #     print(entry_tags)
+        tagSearch = []
+        entrySearch = []
+        if args.words:
+            if args.debug:
+                print("  args.words:  %s" % args.words)
+            if separator in args.words:
+                start = args.words.index(separator) + 1
+                tagSearch = args.words[start : len(args.words)]
+                entrySearch = " ".join(map(str, args.words[0 : start - 1]))
+            else:
+                entrySearch = " ".join(map(str, args.words))
+            if args.debug:
+                print("  entrySearch: '%s'" % entrySearch)
+                print("  tagSearch:   %s" % tagSearch)
+            if len(tagSearch) > 1:
+                diary.error("Can only narrow by one tag.")
+            if len(entrySearch) > 0:
+                diary.error("Cannot narrow by entry.")
+            # un-tuple it
+            tagSearch = tagSearch[0]
         # put tags in a dictionary, for easier lookup
         taglist = {}
         for tag in tags:
@@ -230,14 +250,15 @@ author uses the following to isolate work and personal diaries.
             for entry_tag in entry_tags:
                 if entry_tag[1] == entryId:
                     tags.append(taglist[entry_tag[2]])
-            print('"%s","%s"' % (entry[1], entry[2]), end="")
-            if tags:
-                print(',"', end="")
-                print(",".join(tags), end="")
-                print('"', end="")
-            else:
-                print(',""', end="")
-            print("")
+            if tagSearch in tags:
+                print('"%s","%s"' % (entry[1], entry[2]), end="")
+                if tags:
+                    print(',"', end="")
+                    print(",".join(tags), end="")
+                    print('"', end="")
+                else:
+                    print(',""', end="")
+                print("")
         sys.exit(0)  # handle --writeCSV
 
     if args.delete:
