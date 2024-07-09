@@ -6,12 +6,10 @@ import sys
 from csv import reader
 import textwrap
 import datetime
-import json
-from os import path
 
 
 def mainer():
-    rcfile = "~/.diarydekrc"  # can define next 2 items
+    # rcfile = "~/.diarydekrc"  # can define next 2 items
     defaultDatabase = "~/diarydek.db"
     separator = ":"
     # try:
